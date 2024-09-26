@@ -19,12 +19,13 @@ func Done(err error) {
 	}
 }
 
-// Nice 期望非零值，当传入零值时 panic
-func Nice[V comparable](a V) {
+// Nice 期望非零值，当传入零值时 panic，当传入非零值时返回它
+func Nice[V comparable](a V) V {
 	var b V //zero
 	if a == b {
 		zaplog.ZAPS.P1.LOG.Panic("A IS ZERO VALUE", zap.Any("a", a))
 	}
+	return a
 }
 
 // Zero 期望零值，当传入非零值时 panic

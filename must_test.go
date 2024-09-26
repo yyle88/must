@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/pkg/errors"
+	"github.com/stretchr/testify/require"
 	"github.com/yyle88/must"
 	"github.com/yyle88/must/internal/utils"
 )
@@ -25,9 +26,9 @@ func TestDone(t *testing.T) {
 }
 
 func TestNice(t *testing.T) {
-	must.Nice(88)
-	must.Nice("xyz")
-	must.Nice(3.1415926)
+	require.Equal(t, 88, must.Nice(88))
+	require.Equal(t, "xyz", must.Nice("xyz"))
+	require.Equal(t, 3.1415926, must.Nice(3.1415926))
 
 	utils.ExpectPanic(t, func() {
 		must.Nice(0.0)

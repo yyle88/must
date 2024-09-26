@@ -20,12 +20,14 @@ func Have[K comparable, V any](a map[K]V) {
 	}
 }
 
-// Nice 意思是 NotEmpty 非空 map
+// Nice 意思是 NotEmpty 非空 map，当传入有元素的map时返回它
 // must.Nice(a) 的作用仅仅是判定是否为空，而这里的作用是判断是否有内容，但这样易混淆，因此建议使用 Have 函数
-func Nice[K comparable, V any](a map[K]V) {
+// 当你确实需要既断言有元素，而且还要立即使用它时，也可以用这个函数。
+func Nice[K comparable, V any](a map[K]V) map[K]V {
 	if len(a) == 0 {
 		zaplog.ZAPS.P1.LOG.Panic("expect LENGTH > 0 while got an none map")
 	}
+	return a
 }
 
 // Length 期望长度是 n，否则 panic

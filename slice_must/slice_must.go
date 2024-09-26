@@ -34,12 +34,14 @@ func Have[T any](a []T) {
 	}
 }
 
-// Nice 意思是 NotEmpty 非空 slice
+// Nice 意思是 NotEmpty 非空 slice，当传入有元素的slice时返回它
 // must.Nice(a) 的作用仅仅是判定是否为空，而这里的作用是判断是否有内容，但这样易混淆，因此建议使用 Have 函数
-func Nice[T any](a []T) {
+// 当你确实需要既断言有元素，而且还要立即使用它时，也可以用这个函数。
+func Nice[T any](a []T) []T {
 	if len(a) == 0 {
 		zaplog.ZAPS.P1.LOG.Panic("expect LENGTH > 0 while got an none slice")
 	}
+	return a
 }
 
 // Length 期望长度是 n，否则 panic

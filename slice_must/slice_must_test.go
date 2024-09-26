@@ -3,6 +3,7 @@ package slice_must_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/require"
 	"github.com/yyle88/must/internal/utils"
 	"github.com/yyle88/must/slice_must"
 )
@@ -28,5 +29,13 @@ func TestIn(t *testing.T) {
 
 	utils.ExpectPanic(t, func() {
 		slice_must.In(4, []int{1, 2, 3})
+	})
+}
+
+func TestNice(t *testing.T) {
+	require.Equal(t, []int{1, 2, 3}, slice_must.Nice([]int{1, 2, 3}))
+
+	utils.ExpectPanic(t, func() {
+		slice_must.Nice([]string{})
 	})
 }
