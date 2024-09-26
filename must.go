@@ -89,7 +89,7 @@ func False(v bool) {
 // Have 意思是 NotEmpty 非空 slice
 func Have[T any](a []T) {
 	if len(a) == 0 {
-		zaplog.ZAPS.P1.LOG.Panic("expect LENGTH > 0 while got an empty slice")
+		zaplog.ZAPS.P1.LOG.Panic("expect LENGTH > 0 while got an none slice")
 	}
 }
 
