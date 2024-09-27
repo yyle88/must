@@ -12,7 +12,7 @@ func True(v bool) {
 	}
 }
 
-// Done 期望无错误，假如传入的错误非空时 panic，认为起名为 NoError 也是不错的选择，但实际不要这样用
+// Done 期望无错误，假如传入的错误非空时 panic，认为起名为 NoError 比较冗长而且暗示期望有错，这不符合设计预期，设计的预期就是必然无错
 func Done(err error) {
 	if err != nil {
 		zaplog.ZAPS.P1.LOG.Panic("NO ERROR BUG", zap.Error(err))
@@ -33,6 +33,17 @@ func Zero[V comparable](a V) {
 	var b V //zero
 	if a != b {
 		zaplog.ZAPS.P1.LOG.Panic("A IS NOT ZERO VALUE", zap.Any("a", a))
+	}
+}
+
+// None 期望零值，当传入非零值时 panic
+// 就像 Zero 表示零值，而 None 表示空值，当然二者可以混用，只是含义不同，打印的日志略有不同
+// 当然也可以传 err 表示没有错误
+// 我不想写 must.NoError(err) 这样的函数，毕竟没错就没错，就用正向判定就行
+func None[V comparable](a V) {
+	var b V //zero
+	if a != b {
+		zaplog.ZAPS.P1.LOG.Panic("A IS NOT NONE VALUE", zap.Any("a", a))
 	}
 }
 

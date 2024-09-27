@@ -45,6 +45,17 @@ func TestZero(t *testing.T) {
 	})
 }
 
+func TestNone(t *testing.T) {
+	must.None(0)
+	must.None(0.0)
+	must.None("")
+	must.None(error(nil))
+
+	utils.ExpectPanic(t, func() {
+		must.None(errors.New("wa"))
+	})
+}
+
 func TestEquals(t *testing.T) {
 	must.Equals("abc", "abc")
 	must.Equals(123, 123)
