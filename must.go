@@ -41,7 +41,7 @@ func Zero[V comparable](a V) {
 	}
 }
 
-// None expects a zero value (empty). Panics if the value is non-zero.
+// None expects a zero value (empty/none). Panics if the value is non-zero.
 // None 期望值为零（空）。如果值不为零，则触发 panic。
 func None[V comparable](a V) {
 	var b V // zero value
@@ -116,11 +116,11 @@ func False(v bool) {
 	}
 }
 
-// Have checks that the slice is not empty. Panics if the slice is empty.
+// Have checks that the slice is not empty/none. Panics if the slice is empty/none.
 // Have 检查切片是否为空。如果切片为空，则触发 panic。
 func Have[T any](a []T) {
 	if len(a) == 0 {
-		zaplog.ZAPS.P1.LOG.Panic("expect LENGTH > 0 while got an empty slice")
+		zaplog.ZAPS.P1.LOG.Panic("expect LENGTH > 0 while got an empty/none slice")
 	}
 }
 

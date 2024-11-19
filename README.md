@@ -47,7 +47,7 @@ func main() {
 	// Simulate a function that may return an error
 	result, err := someFunction()
 	must.Done(err)   // Panics if err is non-nil
-	must.Nice(result) // Panics if result is the zero value (nil or empty)
+	must.Nice(result) // Panics if result is the zero value (empty/none)
 
 	fmt.Println("Result is:", result)
 }
@@ -111,7 +111,7 @@ func main() {
 
 - **`must.True(condition bool)`**: Asserts that a boolean condition is `true`. Panics if `false`.
 - **`must.Done(err error)`**: Verifies that an error is `nil`. Panics if the error is not `nil`.
-- **`must.Nice(value interface{})`**: Asserts that the value is not the zero value (i.e., empty or uninitialized). Panics if zero.
+- **`must.Nice(value interface{})`**: Asserts that the value is not the zero value (i.e., empty/none/uninitialized). Panics if zero.
 - **`must.Length(array interface{}, length int)`**: Ensures the provided array or slice has the expected length.
 - **`must.Equals(a, b interface{})`**: Compares two values for equality and panics if they are not equal.
 
@@ -121,7 +121,7 @@ While `must` is great for quick feedback during development or testing, **it sho
 
 ## Future Plans
 
-- Expand assertion types, like checking for non-empty strings or range conditions.
+- Expand assertion types, like checking for non-empty/none/0-length strings or range conditions.
 - Improve documentation with more complex examples and use cases.
 - Introduce integrations with logging frameworks to output detailed panics in production environments (if needed).
 
