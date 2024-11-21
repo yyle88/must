@@ -22,6 +22,14 @@ func Done(err error) {
 	}
 }
 
+// Must expects no error. Panics if the provided error is non-nil.
+// Must 期望没有错误。如果提供的错误不为 nil，则触发 panic。
+func Must(err error) {
+	if err != nil {
+		zaplog.ZAPS.P1.LOG.Panic("ERROR", zap.Error(err))
+	}
+}
+
 // Nice expects a non-zero value. Panics if the value is zero, returns the value if non-zero.
 // Nice 期望一个非零值。如果值为零，则触发 panic；如果值非零，则返回该值。
 func Nice[V comparable](a V) V {
@@ -47,6 +55,18 @@ func None[V comparable](a V) {
 	var b V // zero value
 	if a != b {
 		zaplog.ZAPS.P1.LOG.Panic("A IS NOT NONE VALUE", zap.Any("a", a))
+	}
+}
+
+func Null[V *any](v any) {
+	if v != nil {
+		zaplog.ZAPS.P1.LOG.Panic("SHOULD BE NULL BUT IS FULL")
+	}
+}
+
+func Full[V *any](v any) {
+	if v == nil {
+		zaplog.ZAPS.P1.LOG.Panic("SHOULD BE FULL BUT IS NULL")
 	}
 }
 
