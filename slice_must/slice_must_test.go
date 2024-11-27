@@ -4,14 +4,14 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	"github.com/yyle88/must/internal/utils"
+	"github.com/yyle88/must/internal/tests"
 	"github.com/yyle88/must/slice_must"
 )
 
 func TestEquals(t *testing.T) {
 	slice_must.Equals([]int{1, 2, 3}, []int{1, 2, 3})
 
-	utils.ExpectPanic(t, func() {
+	tests.ExpectPanic(t, func() {
 		slice_must.Equals([]string{"a"}, []string{"b"})
 	})
 }
@@ -19,7 +19,7 @@ func TestEquals(t *testing.T) {
 func TestContains(t *testing.T) {
 	slice_must.Contains([]string{"a", "b", "c"}, "a")
 
-	utils.ExpectPanic(t, func() {
+	tests.ExpectPanic(t, func() {
 		slice_must.Contains([]int{1, 2, 3}, 4)
 	})
 }
@@ -27,7 +27,7 @@ func TestContains(t *testing.T) {
 func TestIn(t *testing.T) {
 	slice_must.In("a", []string{"a", "b", "c"})
 
-	utils.ExpectPanic(t, func() {
+	tests.ExpectPanic(t, func() {
 		slice_must.In(4, []int{1, 2, 3})
 	})
 }
@@ -35,7 +35,7 @@ func TestIn(t *testing.T) {
 func TestNice(t *testing.T) {
 	require.Equal(t, []int{1, 2, 3}, slice_must.Nice([]int{1, 2, 3}))
 
-	utils.ExpectPanic(t, func() {
+	tests.ExpectPanic(t, func() {
 		slice_must.Nice([]string{})
 	})
 }

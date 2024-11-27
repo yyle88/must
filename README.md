@@ -1,142 +1,144 @@
-# `must` – A Simple, Yet Powerful Assertion Library for Go
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/yyle88/must/release.yml?branch=main&label=BUILD)](https://github.com/yyle88/must/actions/workflows/release.yml?query=branch%3Amain)
+[![GoDoc](https://pkg.go.dev/badge/github.com/yyle88/must)](https://pkg.go.dev/github.com/yyle88/must)
+[![Coverage Status](https://img.shields.io/coveralls/github/yyle88/must/master.svg)](https://coveralls.io/github/yyle88/must?branch=main)
+![Supported Go Versions](https://img.shields.io/badge/Go-1.22%2C%201.23-lightgrey.svg)
+[![GitHub Release](https://img.shields.io/github/release/yyle88/must.svg)](https://github.com/yyle88/must/releases)
+[![Go Report Card](https://goreportcard.com/badge/github.com/yyle88/must)](https://goreportcard.com/report/github.com/yyle88/must)
 
-### Why settle for less when you can be sure?
+# `must` – A Simple Assertion Library for Go
 
-In Go, errors are part of the game, but sometimes you want to enforce guarantees that your code must meet—without the need for extensive checks or verbose error-handling. That's where `must` comes in: a lightweight package that ensures certain conditions *must* be true for your program to continue, panic-free. If the condition fails, you get an immediate and clear failure, saving time debugging or testing edge cases.
+In Go, error handling can be messy. The must library simplifies assertions and panics on failure.
 
-## README
+---
+
+## CHINESE README
+
 [中文说明](README.zh.md)
 
-## Install
+## Features
 
-Quickly integrate `must` into your Go project by running:
+- **Simple Error Handling**: Assert conditions directly, avoiding long checks.
+- **Quick Feedback**: Catch bugs early with clear panic messages.
+- **Lightweight & Fast**: Minimal code overhead for speed. Very easy to use.
+- **Versatile Assertions**: Supports checking non-zero values, slice lengths.
+
+---
+
+## Installation
 
 ```bash
 go get github.com/yyle88/must
 ```
 
-## Core Philosophy
+---
 
-The premise behind `must` is simple: **assert the unassertable**.
+## Quick Start
 
-In many cases, Go developers use error handling to validate that conditions are met, but what if you don’t want to write multiple checks for simple conditions? What if certain things in your codebase *must* happen, and anything less should halt the program?
-
-That’s exactly what `must` does. It brings you immediate feedback if something goes wrong with minimal boilerplate, ensuring you catch bugs early in the development cycle.
-
-## Features
-
-- **Enforce Certain Conditions**: Assert that a value or state must meet specific criteria (e.g., non-nil, non-zero).
-- **Clear Failures**: Panic when an assertion fails, providing an explicit and actionable message.
-- **Optimized for Speed**: Perfect for prototypes and small applications where fast feedback is critical.
-
-## Usage
-
-Here’s how you can use `must` in your code to handle assertions concisely:
-
-### Example 1: Validate Non-Nil Values
+### Example 1: Assert a Non-Zero Value
 
 ```go
 package main
 
 import (
-	"fmt"
 	"github.com/yyle88/must"
 )
 
 func main() {
-	// Simulate a function that may return an error
-	result, err := someFunction()
-	must.Done(err)   // Panics if err is non-nil
-	must.Nice(result) // Panics if result is the zero value (empty/none)
+	value := 42
+	must.Nice(value) // Panics if value is zero
 
-	fmt.Println("Result is:", result)
-}
-
-func someFunction() (string, error) {
-	// For demonstration, returning a result and no error
-	return "Hello, must!", nil
+	println("Value is valid:", value)
 }
 ```
-
-### Example 2: Assert a Boolean Condition
-
-```go
-package main
-
-import (
-	"fmt"
-	"github.com/yyle88/must"
-)
-
-func main() {
-	// Simulate a check that should return true
-	isActive := checkStatus()
-	must.True(isActive)  // Panics if isActive is false
-
-	fmt.Println("Status is active:", isActive)
-}
-
-func checkStatus() bool {
-	// Returning true for demonstration
-	return true
-}
-```
-
-### Example 3: Ensure Length Matches
-
-```go
-package main
-
-import (
-	"fmt"
-	"github.com/yyle88/must"
-)
-
-func main() {
-	// Simulating an array
-	arr := []int{1, 2, 3}
-	must.Length(arr, 3) // Panics if the length is not 3
-
-	fmt.Println("Array length is correct:", len(arr))
-}
-```
-
-## Why `must`?
-
-- **Simplicity Over Verbosity**: In Go, error handling is often verbose. `must` simplifies assertions into short, easy-to-understand statements.
-- **Immediate Feedback**: Perfect for scenarios where you need to catch conditions early—be it during development or in fast-paced prototypes.
-- **Zero-Cost Abstraction**: `must` introduces no additional complexity and is highly idiomatic, keeping your Go codebase clean and easy to maintain.
-
-## Core Assertions
-
-- **`must.True(condition bool)`**: Asserts that a boolean condition is `true`. Panics if `false`.
-- **`must.Done(err error)`**: Verifies that an error is `nil`. Panics if the error is not `nil`.
-- **`must.Nice(value interface{})`**: Asserts that the value is not the zero value (i.e., empty/none/uninitialized). Panics if zero.
-- **`must.Length(array interface{}, length int)`**: Ensures the provided array or slice has the expected length.
-- **`must.Equals(a, b interface{})`**: Compares two values for equality and panics if they are not equal.
-
-## A Word of Caution
-
-While `must` is great for quick feedback during development or testing, **it should not be used for production error handling**. If you need fine-grained control over errors, consider using traditional Go error-handling techniques.
-
-## Future Plans
-
-- Expand assertion types, like checking for non-empty/none/0-length strings or range conditions.
-- Improve documentation with more complex examples and use cases.
-- Introduce integrations with logging frameworks to output detailed panics in production environments (if needed).
-
-## Conclusion
-
-With `must`, Go developers get a tool that prioritizes **assertive correctness**. Whether you're in the middle of a prototype or just testing, you don’t need to check everything manually. Let `must` take care of the basic sanity checks for you so you can focus on building great software.
-
-For now, `must` might be small, but it’ll make sure your foundations are solid.
 
 ---
 
-## Give stars
+### Example 2: Validate No Error
 
-Feel free to contribute or improve the package! Your stars and pull requests are welcome.
+```go
+package main
 
-## Thank You
+import (
+	"errors"
+	"github.com/yyle88/must"
+)
 
-If you find this package valuable, give it a star on GitHub! Thank you!!!
+func main() {
+	err := someFunction()
+	must.Done(err) // Panics if err is not nil
+
+	println("No error encountered!")
+}
+
+func someFunction() error {
+	return errors.New("unexpected error")
+}
+```
+
+---
+
+### Example 3: Check Slice Length
+
+```go
+package main
+
+import (
+	"github.com/yyle88/must"
+)
+
+func main() {
+	arr := []int{1, 2, 3}
+	must.Length(arr, 3) // Panics if the length is not 3
+
+	println("Array length is correct")
+}
+```
+
+---
+
+## Core Assertions
+
+Here are the core assertions in `must`, summarized in a table:
+
+| **Function**                 | **Description**                                            | **Example**                   | **Notes**                              |
+|------------------------------|------------------------------------------------------------|-------------------------------|----------------------------------------|
+| **`True(v bool)`**           | Panics if `v` is false.                                    | `must.True(isValid)`          | Validates if `v` is `true`.            |
+| **`Done(err error)`**        | Panics if `err` is not nil.                                | `must.Done(err)`              | Ensures no error occurred.             |
+| **`Must(err error)`**        | Panics if `err` is not nil.                                | `must.Must(err)`              | Similar to `Done`.                     |
+| **`Nice(a V)`**              | Panics if `a` is zero.                                     | `must.Nice(value)`            | Ensures `a` is non-zero.               |
+| **`Zero(a V)`**              | Panics if `a` is not zero.                                 | `must.Zero(value)`            | Ensures `a` is zero.                   |
+| **`None(a V)`**              | Panics if `a` is non-zero.                                 | `must.None(value)`            | Ensures `a` is zero.                   |
+| **`Null(v any)`**            | Panics if `v` is not `nil`.                                | `must.Null(ptr)`              | Ensures `v` is `nil`.                  |
+| **`Full(v any)`**            | Panics if `v` is `nil`.                                    | `must.Full(value)`            | Ensures `v` is non-`nil`.              |
+| **`Equals(a, b V)`**         | Panics if `a` and `b` are not equal.                       | `must.Equals(a, b)`           | Checks if `a` equals `b`.              |
+| **`Same(a, b V)`**           | Panics if `a` and `b` are not equal.                       | `must.Same(a, b)`             | Alias of `Equals`.                     |
+| **`Is(a, b V)`**             | Panics if `a` and `b` are not equal.                       | `must.Is(a, b)`               | Alias of `Equals`.                     |
+| **`Ise(err, target error)`** | Panics if `err` does not match `target` using `errors.Is`. | `must.Ise(err, targetErr)`    | Error matching similar to `errors.Is`. |
+| **`Ok(a V)`**                | Panics if `a` is zero.                                     | `must.Ok(value)`              | Ensures `a` is non-zero.               |
+| **`OK(a V)`**                | Alias of `Ok`, checks for non-zero value.                  | `must.OK(value)`              | Similar to `Ok`.                       |
+| **`TRUE(v bool)`**           | Panics if `v` is false.                                    | `must.TRUE(isValid)`          | Alias of `True`.                       |
+| **`FALSE(v bool)`**          | Panics if `v` is true.                                     | `must.FALSE(isError)`         | Ensures `v` is `false`.                |
+| **`False(v bool)`**          | Panics if `v` is true.                                     | `must.False(isError)`         | Similar to `FALSE`.                    |
+| **`Have(a []T)`**            | Panics if `a` is empty.                                    | `must.Have(slice)`            | Ensures `a` is not empty.              |
+| **`Length(a []T, n int)`**   | Panics if `a` length is not `n`.                           | `must.Length(slice, 3)`       | Ensures `a` length is `n`.             |
+| **`Len(a []T, n int)`**      | Alias of `Length`, ensures `a` length is `n`.              | `must.Len(slice, 3)`          | Validates `a` length.                  |
+| **`In(v T, a []T)`**         | Panics if `v` is not in `a`.                               | `must.In(value, slice)`       | Ensures `v` is in `a`.                 |
+| **`Contains(a []T, v T)`**   | Panics if `a` does not contain `v`.                        | `must.Contains(slice, value)` | Ensures `a` contains `v`.              |
+
+---
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## Contribute and Support
+
+Welcome to contribute to this project by submitting pull requests or reporting issues.
+
+If you find this package helpful, give it a star on GitHub!
+
+**Thank you for your support!**
+
+**Happy Coding with `must`!** 🎉
