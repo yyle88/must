@@ -7,7 +7,7 @@
 
 # `must` – A Simple Assertion Library for Go
 
-In Go, error handling can be messy. The must library simplifies assertions and panics on failure.
+The must library simplifies assertions and panics on failure. Assert conditions directly, avoiding long checks
 
 ---
 
