@@ -1,4 +1,4 @@
-package slice_must
+package mustslice
 
 import (
 	"slices"
@@ -7,36 +7,40 @@ import (
 	"go.uber.org/zap"
 )
 
+// Equals checks if two slices are equal, panics if not.
+// Equals 检查两个切片是否相等，不相等则触发 panic。
 func Equals[V comparable](a, b []V) {
 	if !slices.Equal(a, b) {
 		zaplog.ZAPS.P1.LOG.Panic("expect slice equals while not equals", zap.Int("len_a", len(a)), zap.Int("len_b", len(b)))
 	}
 }
 
-// In 检查元素是否在数组里
+// In checks if an element exists in a slice, panics if not.
+// In 检查某个元素是否存在于切片中，不存在则触发 panic。
 func In[T comparable](v T, a []T) {
 	if !slices.Contains(a, v) {
 		zaplog.ZAPS.P1.LOG.Panic("expect value in slice while not in", zap.Any("v", v), zap.Int("len", len(a)))
 	}
 }
 
-// Contains 检查数组是否包含元素，假如不包含就 panic
+// Contains checks if a slice contains a specific element, panics if not.
+// Contains 检查切片是否包含某个特定元素，不包含则触发 panic。
 func Contains[T comparable](a []T, v T) {
 	if !slices.Contains(a, v) {
 		zaplog.ZAPS.P1.LOG.Panic("expect slice contains value while not contains", zap.Int("len", len(a)), zap.Any("v", v))
 	}
 }
 
-// Have 意思是 NotEmpty 非空 slice
+// Have ensures the slice is not empty, panics if it is.
+// Have 确保切片不为空，为空则触发 panic。
 func Have[T any](a []T) {
 	if len(a) == 0 {
 		zaplog.ZAPS.P1.LOG.Panic("expect LENGTH > 0 while got an none slice")
 	}
 }
 
-// Nice 意思是 NotEmpty 非空 slice，当传入有元素的slice时返回它
-// must.Nice(a) 的作用仅仅是判定是否为空，而这里的作用是判断是否有内容，但这样易混淆，因此建议使用 Have 函数
-// 当你确实需要既断言有元素，而且还要立即使用它时，也可以用这个函数。
+// Nice ensures the slice is not empty, and returns it if it contains elements.
+// Nice 确保切片不为空，若切片有元素则返回它。
 func Nice[T any](a []T) []T {
 	if len(a) == 0 {
 		zaplog.ZAPS.P1.LOG.Panic("expect LENGTH > 0 while got an none slice")
@@ -44,14 +48,16 @@ func Nice[T any](a []T) []T {
 	return a
 }
 
-// Length 期望长度是 n，否则 panic
+// Length checks if the slice's length equals the expected value, panics if not.
+// Length 检查切片的长度是否等于期望值，不等则触发 panic。
 func Length[T any](a []T, n int) {
 	if len(a) != n {
 		zaplog.ZAPS.P1.LOG.Panic("expect LENGTH = n while not equals", zap.Int("len", len(a)), zap.Int("n", n))
 	}
 }
 
-// Len 和 Length 作用相同，只是缩写，我更倾向于使用缩写
+// Len checks if the slice's length equals the expected value, panics if not.
+// Len 检查切片的长度是否等于期望值，不等则触发 panic。
 func Len[T any](a []T, n int) {
 	if len(a) != n {
 		zaplog.ZAPS.P1.LOG.Panic("expect LENGTH = n while not equals", zap.Int("len", len(a)), zap.Int("n", n))
