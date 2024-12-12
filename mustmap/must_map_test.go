@@ -47,6 +47,14 @@ func TestNice(t *testing.T) {
 	})
 }
 
+func TestNone(t *testing.T) {
+	mustmap.None(map[int]int{})
+
+	tests.ExpectPanic(t, func() {
+		mustmap.None(map[string]int{"a": 1, "b": 2})
+	})
+}
+
 func TestLength(t *testing.T) {
 	// 正常情况: map 的长度等于期望值
 	mustmap.Length(map[int]string{

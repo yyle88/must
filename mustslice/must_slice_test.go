@@ -48,6 +48,14 @@ func TestNice(t *testing.T) {
 	})
 }
 
+func TestNone(t *testing.T) {
+	mustslice.None([]int{})
+
+	tests.ExpectPanic(t, func() {
+		mustslice.None([]int{1, 2, 3})
+	})
+}
+
 func TestHave(t *testing.T) {
 	// 非空切片通过
 	mustslice.Have([]int{1, 2, 3})

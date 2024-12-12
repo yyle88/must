@@ -32,6 +32,14 @@ func Nice[K comparable, V any](a map[K]V) map[K]V {
 	return a
 }
 
+// None ensures the map is empty, panics if not.
+// None 确保 map 内容为空，若有元素则 panic。
+func None[K comparable, V any](a map[K]V) {
+	if len(a) != 0 {
+		zaplog.ZAPS.P1.LOG.Panic("expect LENGTH = 0 while contains elements")
+	}
+}
+
 // Length checks if the length of a map is equal to n. If not, it panics.
 // Length 检查一个 map 的长度是否等于 n，如果不等，则触发 panic。
 func Length[K comparable, V any](a map[K]V, n int) {
