@@ -9,6 +9,6 @@ import (
 
 func TestExpectPanic(t *testing.T) {
 	tests.ExpectPanic(t, func() {
-		panic(errors.New("exp"))
+		panic(errors.New("expect-panic"))
 	})
 }

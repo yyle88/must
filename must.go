@@ -60,7 +60,7 @@ func None[V comparable](a V) {
 
 // Null expects the value to be nil. Panics if the value is non-nil.
 // Null 期望值为 nil。如果值不为 nil，则触发 panic。
-func Null[V *any](v any) {
+func Null[T any](v *T) {
 	if v != nil {
 		zaplog.ZAPS.P1.LOG.Panic("SHOULD BE NULL BUT IS FULL")
 	}
@@ -68,7 +68,7 @@ func Null[V *any](v any) {
 
 // Full expects the value to be non-nil. Panics if the value is nil.
 // Full 期望值为非 nil。如果值为 nil，则触发 panic。
-func Full[V *any](v any) {
+func Full[T any](v *T) {
 	if v == nil {
 		zaplog.ZAPS.P1.LOG.Panic("SHOULD BE FULL BUT IS NULL")
 	}

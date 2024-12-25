@@ -167,3 +167,25 @@ func TestContains(t *testing.T) {
 		must.Contains([]int{1, 2, 3}, 4)
 	})
 }
+
+type Example struct {
+	S string
+}
+
+func TestNull(t *testing.T) {
+	var example *Example
+	must.Null(example)
+
+	tests.ExpectPanic(t, func() {
+		must.Null(&Example{S: "abc"})
+	})
+}
+
+func TestFull(t *testing.T) {
+	must.Full(&Example{S: "abc"})
+
+	tests.ExpectPanic(t, func() {
+		var example *Example
+		must.Full(example)
+	})
+}
