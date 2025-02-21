@@ -74,14 +74,6 @@ func Full[T any](v *T) {
 	}
 }
 
-// Equal expects the values to be equal. Panics if they are not equal.
-// Equal 期望值相等。如果值不相等，则触发 panic。
-func Equal[V comparable](a, b V) {
-	if a != b {
-		zaplog.ZAPS.Skip1.LOG.Panic("A AND B ARE NOT EQUAL", zap.Any("a", a), zap.Any("b", b))
-	}
-}
-
 // Equals expects the values to be equal. Panics if they are not equal.
 // Equals 期望值相等。如果值不相等，则触发 panic。
 func Equals[V comparable](a, b V) {
