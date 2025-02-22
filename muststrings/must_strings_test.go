@@ -22,3 +22,35 @@ func TestHasSuffix(t *testing.T) {
 		muststrings.HasSuffix("world", "lo")
 	})
 }
+
+func TestNotHasPrefix(t *testing.T) {
+	muststrings.NotHasPrefix("hello", "hi")
+
+	tests.ExpectPanic(t, func() {
+		muststrings.NotHasPrefix("hello", "he")
+	})
+}
+
+func TestNotHasSuffix(t *testing.T) {
+	muststrings.NotHasSuffix("world", "lo")
+
+	tests.ExpectPanic(t, func() {
+		muststrings.NotHasSuffix("world", "ld")
+	})
+}
+
+func TestContains(t *testing.T) {
+	muststrings.Contains("hello world", "world")
+
+	tests.ExpectPanic(t, func() {
+		muststrings.Contains("hello world", "planet")
+	})
+}
+
+func TestNotContains(t *testing.T) {
+	muststrings.NotContains("hello world", "planet")
+
+	tests.ExpectPanic(t, func() {
+		muststrings.NotContains("hello world", "world")
+	})
+}
