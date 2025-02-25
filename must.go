@@ -90,6 +90,12 @@ func Same[V comparable](a, b V) {
 	}
 }
 
+func Different[V comparable](a, b V) {
+	if a == b {
+		zaplog.ZAPS.Skip1.LOG.Panic("EXPECT DIFFERENT WHILE SAME", zap.Any("a", a), zap.Any("b", b))
+	}
+}
+
 // Is expects equality, not the logic of errors.Is, but the logic of Equals. Panics if the values are not equal.
 // Is 期望相等，不是 errors.Is 的逻辑，而是 Equals 的逻辑。如果值不相等，则触发 panic。
 func Is[V comparable](a, b V) {

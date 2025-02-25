@@ -18,6 +18,16 @@ func TestEquals(t *testing.T) {
 	})
 }
 
+func TestDifferent(t *testing.T) {
+	// 正常情况下，两个切片相等
+	mustslice.Different([]string{"a"}, []string{"b"})
+
+	// 切片不相等时触发 panic
+	tests.ExpectPanic(t, func() {
+		mustslice.Different([]int{1, 2, 3}, []int{1, 2, 3})
+	})
+}
+
 func TestContains(t *testing.T) {
 	// 切片包含指定元素时通过
 	mustslice.Contains([]string{"a", "b", "c"}, "a")

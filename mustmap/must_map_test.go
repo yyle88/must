@@ -26,6 +26,24 @@ func TestEquals(t *testing.T) {
 	})
 }
 
+func TestDifferent(t *testing.T) {
+	mustmap.Different(map[string]int{
+		"a": 1,
+	}, map[string]int{
+		"b": 2,
+	})
+
+	tests.ExpectPanic(t, func() {
+		mustmap.Different(map[int]string{
+			1: "a",
+			2: "b",
+		}, map[int]string{
+			2: "b",
+			1: "a",
+		})
+	})
+}
+
 func TestHave(t *testing.T) {
 	// 正常情况: 非空 map 不应触发 panic
 	mustmap.Have(map[int]string{

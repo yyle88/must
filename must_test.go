@@ -25,6 +25,14 @@ func TestDone(t *testing.T) {
 	})
 }
 
+func TestMust(t *testing.T) {
+	must.Must(error(nil))
+
+	tests.ExpectPanic(t, func() {
+		must.Must(errors.New("wa"))
+	})
+}
+
 func TestNice(t *testing.T) {
 	require.Equal(t, 88, must.Nice(88))
 	require.Equal(t, "xyz", must.Nice("xyz"))
@@ -66,6 +74,26 @@ func TestEquals(t *testing.T) {
 	})
 }
 
+func TestSame(t *testing.T) {
+	must.Same("abc", "abc")
+	must.Same(123, 123)
+	must.Same(0.8, 0.8)
+
+	tests.ExpectPanic(t, func() {
+		must.Same("abc", "xyz")
+	})
+}
+
+func TestDifferent(t *testing.T) {
+	must.Different("abc", "xyz")
+	must.Different(123, 321)
+	must.Different(0.8, 0.88)
+
+	tests.ExpectPanic(t, func() {
+		must.Different("abc", "abc")
+	})
+}
+
 func TestIs(t *testing.T) {
 	must.Is(123, 123)
 	must.Is("!", "!")
@@ -74,6 +102,15 @@ func TestIs(t *testing.T) {
 
 	tests.ExpectPanic(t, func() {
 		must.Is(1, 2)
+	})
+}
+
+func TestIse(t *testing.T) {
+	errA := errors.New("a")
+	must.Ise(errA, errA)
+
+	tests.ExpectPanic(t, func() {
+		must.Ise(errors.New("a"), errors.New("b"))
 	})
 }
 

@@ -15,6 +15,14 @@ func Equals[V comparable](a, b []V) {
 	}
 }
 
+// Different checks if two slices are different, panics if they are equal.
+// Different 检查两个切片是否不同，如果相等则触发 panic。
+func Different[V comparable](a, b []V) {
+	if slices.Equal(a, b) {
+		zaplog.ZAPS.Skip1.LOG.Panic("expect slice different while equals", zap.Int("len_a", len(a)), zap.Int("len_b", len(b)))
+	}
+}
+
 // In checks if an element exists in a slice, panics if not.
 // In 检查某个元素是否存在于切片中，不存在则触发 panic。
 func In[T comparable](v T, a []T) {
