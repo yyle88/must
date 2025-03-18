@@ -26,6 +26,24 @@ func TestEquals(t *testing.T) {
 	})
 }
 
+func TestDiff(t *testing.T) {
+	mustmap.Diff(map[string]int{
+		"a": 1,
+	}, map[string]int{
+		"b": 2,
+	})
+
+	tests.ExpectPanic(t, func() {
+		mustmap.Diff(map[int]string{
+			1: "a",
+			2: "b",
+		}, map[int]string{
+			2: "b",
+			1: "a",
+		})
+	})
+}
+
 func TestDifferent(t *testing.T) {
 	mustmap.Different(map[string]int{
 		"a": 1,

@@ -84,6 +84,16 @@ func TestSame(t *testing.T) {
 	})
 }
 
+func TestDiff(t *testing.T) {
+	must.Diff("abc", "xyz")
+	must.Diff(123, 321)
+	must.Diff(0.8, 0.88)
+
+	tests.ExpectPanic(t, func() {
+		must.Diff("abc", "abc")
+	})
+}
+
 func TestDifferent(t *testing.T) {
 	must.Different("abc", "xyz")
 	must.Different(123, 321)

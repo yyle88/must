@@ -90,6 +90,12 @@ func Same[V comparable](a, b V) {
 	}
 }
 
+func Diff[V comparable](a, b V) {
+	if a == b {
+		zaplog.ZAPS.Skip1.LOG.Panic("EXPECT DIFFERENT WHILE SAME", zap.Any("a", a), zap.Any("b", b))
+	}
+}
+
 func Different[V comparable](a, b V) {
 	if a == b {
 		zaplog.ZAPS.Skip1.LOG.Panic("EXPECT DIFFERENT WHILE SAME", zap.Any("a", a), zap.Any("b", b))

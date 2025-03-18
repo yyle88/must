@@ -15,6 +15,14 @@ func Equals[K, V comparable](a, b map[K]V) {
 	}
 }
 
+// Diff compares two maps for inequality. If they are equal, it panics.
+// Diff 比较两个 map 是否不相等，如果相等，则触发 panic。
+func Diff[K, V comparable](a, b map[K]V) {
+	if maps.Equal(a, b) {
+		zaplog.ZAPS.Skip1.LOG.Panic("expect map different while equals", zap.Int("len_a", len(a)), zap.Int("len_b", len(b)))
+	}
+}
+
 // Different compares two maps for inequality. If they are equal, it panics.
 // Different 比较两个 map 是否不相等，如果相等，则触发 panic。
 func Different[K, V comparable](a, b map[K]V) {
