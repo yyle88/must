@@ -98,6 +98,20 @@ func TestSameNice(t *testing.T) {
 	})
 }
 
+func TestSane(t *testing.T) {
+	require.Equal(t, "abc", must.Sane("abc", "abc"))
+	require.Equal(t, 123, must.Sane(123, 123))
+	require.Equal(t, 0.8, must.Sane(0.8, 0.8))
+
+	tests.ExpectPanic(t, func() {
+		must.Sane("abc", "xyz")
+	})
+
+	tests.ExpectPanic(t, func() {
+		must.Sane(0, 0)
+	})
+}
+
 func TestDiff(t *testing.T) {
 	must.Diff("abc", "xyz")
 	must.Diff(123, 321)

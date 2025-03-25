@@ -33,11 +33,7 @@ func Must(err error) {
 // Nice expects a non-zero value. Panics if the value is zero, returns the value if non-zero.
 // Nice 期望一个非零值。如果值为零，则触发 panic；如果值非零，则返回该值。
 func Nice[V comparable](a V) V {
-	var z V // zero value
-	if a == z {
-		zaplog.ZAPS.Skip1.LOG.Panic("A IS ZERO VALUE", zap.Any("a", a))
-	}
-	return a
+	return nice(a)
 }
 
 // Zero expects a zero value. Panics if the value is non-zero.
@@ -85,24 +81,21 @@ func Equals[V comparable](a, b V) {
 // Same expects the values to be same. Panics if they are not same.
 // Same 期望值相等。如果值不相等，则触发 panic。
 func Same[V comparable](a, b V) {
-	if a != b {
-		zaplog.ZAPS.Skip1.LOG.Panic("A AND B ARE NOT SAME", zap.Any("a", a), zap.Any("b", b))
-	}
+	same(a, b)
 }
 
 // SameNice expects the values to be the same and non-zero. Panics if they are not the same or if the value is zero. Returns the value if the conditions are met.
 // SameNice 期望值相等且非零。如果值不相等或为零，则触发 panic。如果条件满足，则返回该值。
 func SameNice[V comparable](a, b V) V {
-	//因为日志打印的位置不同，这里不要复用 Same 函数
-	if a != b {
-		zaplog.ZAPS.Skip1.LOG.Panic("A AND B ARE NOT SAME", zap.Any("a", a), zap.Any("b", b))
-	}
-	//因为日志打印的位置不同，这里不要复用 Nice 函数
-	var z V // zero value
-	if a == z {
-		zaplog.ZAPS.Skip1.LOG.Panic("A IS ZERO VALUE", zap.Any("a", a))
-	}
-	return a
+	same(a, b)
+	return nice(a)
+}
+
+// Sane means same && nice
+// Sane 期望值相等且非零。如果值不相等或为零，则触发 panic。如果条件满足，则返回该值。
+func Sane[V comparable](a, b V) V {
+	same(a, b)
+	return nice(a)
 }
 
 func Diff[V comparable](a, b V) {
