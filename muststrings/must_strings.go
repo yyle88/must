@@ -7,6 +7,22 @@ import (
 	"go.uber.org/zap"
 )
 
+// Length expects the string to have length n. Panics if the length is not n.
+// Length 期望字符串的长度为 n。如果长度不是 n，则触发 panic。
+func Length(a string, n int) {
+	if len(a) != n {
+		zaplog.ZAPS.Skip1.LOG.Panic("expect LENGTH = n while not equals", zap.Int("len", len(a)), zap.Int("n", n))
+	}
+}
+
+// Len is an abbreviation of Length, serving the same purpose. Panics if the length is not n.
+// Len 是 Length 的缩写，功能相同。如果长度不是 n，则触发 panic。
+func Len(a string, n int) {
+	if len(a) != n {
+		zaplog.ZAPS.Skip1.LOG.Panic("expect LENGTH = n while not equals", zap.Int("len", len(a)), zap.Int("n", n))
+	}
+}
+
 // HasPrefix checks if the string has the specified prefix, panics if not.
 // HasPrefix 检查字符串是否有指定的前缀，没有则触发 panic。
 func HasPrefix(a string, prefix string) {

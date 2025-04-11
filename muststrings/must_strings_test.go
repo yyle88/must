@@ -7,6 +7,22 @@ import (
 	"github.com/yyle88/must/muststrings"
 )
 
+func TestLength(t *testing.T) {
+	muststrings.Length("abc", 3)
+
+	tests.ExpectPanic(t, func() {
+		muststrings.Length("xyz", 0)
+	})
+}
+
+func TestLen(t *testing.T) {
+	muststrings.Len("123", 3)
+
+	tests.ExpectPanic(t, func() {
+		muststrings.Len("000", 0)
+	})
+}
+
 func TestHasPrefix(t *testing.T) {
 	muststrings.HasPrefix("hello", "he")
 
