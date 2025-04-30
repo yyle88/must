@@ -170,10 +170,11 @@ func False(v bool) {
 
 // Have checks that the slice is not empty/none. Panics if the slice is empty/none.
 // Have 检查切片是否为空。如果切片为空，则触发 panic。
-func Have[T any](a []T) {
+func Have[T any](a []T) []T {
 	if len(a) == 0 {
 		zaplog.ZAPS.Skip1.LOG.Panic("expect LENGTH > 0 while got an empty/none slice")
 	}
+	return a
 }
 
 // Length expects the slice to have length n. Panics if the length is not n.

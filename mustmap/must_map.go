@@ -33,10 +33,11 @@ func Different[K, V comparable](a, b map[K]V) {
 
 // Have checks if a map is non-empty. If it is empty, it panics.
 // Have 检查一个 map 是否非空，如果为空，则触发 panic。
-func Have[K comparable, V any](a map[K]V) {
+func Have[K comparable, V any](a map[K]V) map[K]V {
 	if len(a) == 0 {
 		zaplog.ZAPS.Skip1.LOG.Panic("expect LENGTH > 0 while got an none map")
 	}
+	return a
 }
 
 // Nice checks if a map is non-empty and returns it. If it is empty, it panics.

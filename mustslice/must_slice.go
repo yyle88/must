@@ -47,12 +47,13 @@ func Contains[T comparable](a []T, v T) {
 	}
 }
 
-// Have ensures the slice is not empty, panics if it is.
+// Have function ensures the slice is not empty, panics if it is.
 // Have 确保切片不为空，为空则触发 panic。
-func Have[T any](a []T) {
+func Have[T any](a []T) []T {
 	if len(a) == 0 {
 		zaplog.ZAPS.Skip1.LOG.Panic("expect LENGTH > 0 while got an none slice")
 	}
+	return a
 }
 
 // Nice ensures the slice is not empty, and returns it if it contains elements.

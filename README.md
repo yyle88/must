@@ -129,15 +129,15 @@ Here are the core assertions in `must`, summarized in a table:
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+MIT License. See [LICENSE](LICENSE).
 
 ---
 
 ## Contribute and Support
 
-Welcome to contribute to this project by submitting pull requests or reporting issues.
+Welcome to contribute to this project by submitting pull requests and reporting issues.
 
-If you find this package helpful, give it a star on GitHub!
+If you find this package valuable, give me some stars on GitHub! Thank you!!!
 
 **Thank you for your support!**
 
