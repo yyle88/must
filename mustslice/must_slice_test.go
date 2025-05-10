@@ -68,6 +68,24 @@ func TestNice(t *testing.T) {
 	})
 }
 
+func TestZero(t *testing.T) {
+	mustslice.Zero([]int{})
+	mustslice.Zero([]string{})
+	mustslice.Zero(([]int)(nil))
+
+	tests.ExpectPanic(t, func() {
+		mustslice.Zero([]int{1})
+	})
+
+	tests.ExpectPanic(t, func() {
+		mustslice.Zero([]string{"a"})
+	})
+
+	tests.ExpectPanic(t, func() {
+		mustslice.Zero([]int{1, 2, 3})
+	})
+}
+
 func TestNone(t *testing.T) {
 	mustslice.None([]int{})
 

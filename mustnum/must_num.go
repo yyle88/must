@@ -38,3 +38,28 @@ func Gte[V Num](a, b V) {
 		zaplog.ZAPS.Skip1.LOG.Panic("expect Gte while not", zap.Any("a", a), zap.Any("b", b))
 	}
 }
+
+func Nice[V Num](a V) V {
+	if a == 0 {
+		zaplog.ZAPS.Skip1.LOG.Panic("A IS ZERO VALUE", zap.Any("a", a))
+	}
+	return a
+}
+
+func Zero[V Num](a V) {
+	if a != 0 {
+		zaplog.ZAPS.Skip1.LOG.Panic("A IS NOT ZERO VALUE", zap.Any("a", a))
+	}
+}
+
+func Positive[V Num](v V) {
+	if v <= 0 {
+		zaplog.ZAPS.Skip1.LOG.Panic("expect POSITIVE while not", zap.Any("v", v))
+	}
+}
+
+func Negative[V Num](v V) {
+	if v >= 0 {
+		zaplog.ZAPS.Skip1.LOG.Panic("expect NEGATIVE while not", zap.Any("v", v))
+	}
+}

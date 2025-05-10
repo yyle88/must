@@ -73,3 +73,75 @@ func TestGte(t *testing.T) {
 		mustnum.Gte(0.11, 0.90)
 	})
 }
+
+func TestNice(t *testing.T) {
+	mustnum.Nice(100)
+	mustnum.Nice(-100)
+	mustnum.Nice(0.1)
+	mustnum.Nice(-0.1)
+
+	tests.ExpectPanic(t, func() {
+		mustnum.Nice(0)
+	})
+
+	tests.ExpectPanic(t, func() {
+		mustnum.Nice(0.0)
+	})
+}
+
+func TestZero(t *testing.T) {
+	mustnum.Zero(0)
+	mustnum.Zero(0.0)
+
+	tests.ExpectPanic(t, func() {
+		mustnum.Zero(100)
+	})
+
+	tests.ExpectPanic(t, func() {
+		mustnum.Zero(-100)
+	})
+
+	tests.ExpectPanic(t, func() {
+		mustnum.Zero(0.1)
+	})
+
+	tests.ExpectPanic(t, func() {
+		mustnum.Zero(-0.1)
+	})
+}
+
+func TestPositive(t *testing.T) {
+	mustnum.Positive(100)
+	mustnum.Positive(0.1)
+	mustnum.Positive(uint64(1))
+
+	tests.ExpectPanic(t, func() {
+		mustnum.Positive(0)
+	})
+
+	tests.ExpectPanic(t, func() {
+		mustnum.Positive(-1)
+	})
+
+	tests.ExpectPanic(t, func() {
+		mustnum.Positive(-0.1)
+	})
+}
+
+func TestNegative(t *testing.T) {
+	mustnum.Negative(-100)
+	mustnum.Negative(-0.1)
+	mustnum.Negative(int64(-1))
+
+	tests.ExpectPanic(t, func() {
+		mustnum.Negative(0)
+	})
+
+	tests.ExpectPanic(t, func() {
+		mustnum.Negative(1)
+	})
+
+	tests.ExpectPanic(t, func() {
+		mustnum.Negative(0.1)
+	})
+}

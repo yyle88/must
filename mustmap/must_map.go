@@ -49,6 +49,12 @@ func Nice[K comparable, V any](a map[K]V) map[K]V {
 	return a
 }
 
+func Zero[K comparable, V any](a map[K]V) {
+	if len(a) != 0 {
+		zaplog.ZAPS.Skip1.LOG.Panic("expect LENGTH = 0 while contains elements")
+	}
+}
+
 // None ensures the map is empty, panics if not.
 // None 确保 map 内容为空，若有元素则 panic。
 func None[K comparable, V any](a map[K]V) {

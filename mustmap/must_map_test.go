@@ -83,6 +83,24 @@ func TestNice(t *testing.T) {
 	})
 }
 
+func TestZero(t *testing.T) {
+	mustmap.Zero(map[int]string{})
+	mustmap.Zero(map[string]int{})
+	mustmap.Zero((map[int]string)(nil))
+
+	tests.ExpectPanic(t, func() {
+		mustmap.Zero(map[int]string{1: "a"})
+	})
+
+	tests.ExpectPanic(t, func() {
+		mustmap.Zero(map[string]int{"a": 1})
+	})
+
+	tests.ExpectPanic(t, func() {
+		mustmap.Zero(map[string]int{"a": 1, "b": 2})
+	})
+}
+
 func TestNone(t *testing.T) {
 	mustmap.None(map[int]int{})
 

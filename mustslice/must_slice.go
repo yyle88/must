@@ -65,6 +65,12 @@ func Nice[T any](a []T) []T {
 	return a
 }
 
+func Zero[T any](a []T) {
+	if len(a) > 0 {
+		zaplog.ZAPS.Skip1.LOG.Panic("expect LENGTH = 0 while contains elements")
+	}
+}
+
 // None ensures the slice is empty, panics if not.
 // None 确保切片内容为空，若有元素则 panic。
 func None[T any](a []T) {
