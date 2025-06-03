@@ -257,7 +257,8 @@ func TestNull(t *testing.T) {
 }
 
 func TestFull(t *testing.T) {
-	must.Full(&Example{S: "abc"})
+	res := must.Full(&Example{S: "abc"})
+	require.Equal(t, "abc", res.S)
 
 	tests.ExpectPanic(t, func() {
 		var example *Example

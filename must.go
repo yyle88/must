@@ -68,10 +68,11 @@ func Null[T any](v *T) {
 
 // Full expects the value to be non-nil. Panics if the value is nil.
 // Full 期望值为非 nil。如果值为 nil，则触发 panic。
-func Full[T any](v *T) {
+func Full[T any](v *T) *T {
 	if v == nil {
 		zaplog.ZAPS.Skip1.LOG.Panic("SHOULD BE FULL BUT IS NULL")
 	}
+	return v
 }
 
 // Equals expects the values to be equal. Panics if they are not equal.
