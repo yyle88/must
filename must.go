@@ -2,6 +2,7 @@ package must
 
 import (
 	"github.com/pkg/errors"
+	"github.com/yyle88/must/internal/utils"
 	"github.com/yyle88/zaplog"
 	"go.uber.org/zap"
 )
@@ -33,8 +34,7 @@ func Must(err error) {
 // Nice expects a non-zero value. Panics if the value is zero, returns the value if non-zero.
 // Nice 期望一个非零值。如果值为零，则触发 panic；如果值非零，则返回该值。
 func Nice[V comparable](a V) V {
-	var z V // zero value
-	if a == z {
+	if a == utils.Zero[V]() {
 		zaplog.ZAPS.Skip1.LOG.Panic("A IS ZERO VALUE", zap.Any("a", a))
 	}
 	return a
@@ -43,8 +43,7 @@ func Nice[V comparable](a V) V {
 // Zero expects a zero value. Panics if the value is non-zero.
 // Zero 期望值为零。如果值不为零，则触发 panic。
 func Zero[V comparable](a V) {
-	var z V // zero value
-	if a != z {
+	if a != utils.Zero[V]() {
 		zaplog.ZAPS.Skip1.LOG.Panic("A IS NOT ZERO VALUE", zap.Any("a", a))
 	}
 }
@@ -52,8 +51,7 @@ func Zero[V comparable](a V) {
 // None expects a zero value (empty/none). Panics if the value is non-zero.
 // None 期望值为零（空）。如果值不为零，则触发 panic。
 func None[V comparable](a V) {
-	var z V // zero value
-	if a != z {
+	if a != utils.Zero[V]() {
 		zaplog.ZAPS.Skip1.LOG.Panic("A IS NOT NONE VALUE", zap.Any("a", a))
 	}
 }
@@ -136,8 +134,7 @@ func Ise(err, target error) {
 // Ok expects a non-zero value. Panics if the value is zero.
 // Ok 期望一个非零值。如果值为零，则触发 panic。
 func Ok[V comparable](a V) {
-	var z V // zero value
-	if a == z {
+	if a == utils.Zero[V]() {
 		zaplog.ZAPS.Skip1.LOG.Panic("A IS ZERO VALUE NOT OK", zap.Any("a", a))
 	}
 }
@@ -145,8 +142,7 @@ func Ok[V comparable](a V) {
 // OK expects a non-zero value. Panics if the value is zero. Provides an alternative name for preference.
 // OK 期望一个非零值。如果值为零，则触发 panic。提供一个偏好的替代名称。
 func OK[V comparable](a V) {
-	var z V // zero value
-	if a == z {
+	if a == utils.Zero[V]() {
 		zaplog.ZAPS.Skip1.LOG.Panic("A IS ZERO VALUE NOT OK", zap.Any("a", a))
 	}
 }
