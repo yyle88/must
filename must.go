@@ -3,6 +3,7 @@ package must
 import (
 	"github.com/pkg/errors"
 	"github.com/yyle88/must/internal/utils"
+	"github.com/yyle88/must/mustskip/mustskip2c"
 	"github.com/yyle88/zaplog"
 	"go.uber.org/zap"
 )
@@ -92,15 +93,15 @@ func Same[V comparable](a, b V) {
 // SameNice expects the values to be the same and non-zero. Panics if they are not the same or if the value is zero. Returns the value if the conditions are met.
 // SameNice 期望值相等且非零。如果值不相等或为零，则触发 panic。如果条件满足，则返回该值。
 func SameNice[V comparable](a, b V) V {
-	same(a, b)
-	return nice(a)
+	mustskip2c.Same(a, b)
+	return mustskip2c.Nice(a)
 }
 
 // Sane means same && nice
 // Sane 期望值相等且非零。如果值不相等或为零，则触发 panic。如果条件满足，则返回该值。
 func Sane[V comparable](a, b V) V {
-	same(a, b)
-	return nice(a)
+	mustskip2c.Same(a, b)
+	return mustskip2c.Nice(a)
 }
 
 func Diff[V comparable](a, b V) {
