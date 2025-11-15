@@ -1,9 +1,18 @@
+// Package must provides panic-on-failure assertion utilities with structured logging
+// Implements type-safe validation functions that panic with detailed context when expectations are not met
+// Supports generic types enabling flexible value checking across different data types
+// Integrates with zap logging to provide precise stack trace information
+//
+// must 提供带结构化日志的 panic-on-failure 断言工具
+// 实现类型安全的验证函数，当期望不满足时 panic 并提供详细上下文
+// 支持泛型类型，在不同数据类型间灵活检查值
+// 与 zap 日志集成，提供精确的堆栈跟踪信息
 package must
 
 import (
 	"github.com/pkg/errors"
+	"github.com/yyle88/must/internal/mustskip/must2"
 	"github.com/yyle88/must/internal/utils"
-	"github.com/yyle88/must/mustskip/mustskip2c"
 	"github.com/yyle88/zaplog"
 	"go.uber.org/zap"
 )
@@ -12,7 +21,7 @@ import (
 // True 期望值为 true。如果值为 false，则触发 panic。
 func True(v bool) {
 	if !v {
-		zaplog.ZAPS.Skip1.LOG.Panic("expect TRUE while got FALSE", zap.Bool("v", v))
+		zaplog.ZAPS.Skip1.LOG.Panic("VALUE IS FALSE(SHOULD BE TRUE)", zap.Bool("v", v))
 	}
 }
 
@@ -20,7 +29,7 @@ func True(v bool) {
 // Done 期望没有错误。如果提供的错误不为 nil，则触发 panic。
 func Done(err error) {
 	if err != nil {
-		zaplog.ZAPS.Skip1.LOG.Panic("NO ERROR BUG", zap.Error(err))
+		zaplog.ZAPS.Skip1.LOG.Panic("EXPECTED NO ERROR(BUT HAS ERROR)", zap.Error(err))
 	}
 }
 
@@ -28,7 +37,7 @@ func Done(err error) {
 // Must 期望没有错误。如果提供的错误不为 nil，则触发 panic。
 func Must(err error) {
 	if err != nil {
-		zaplog.ZAPS.Skip1.LOG.Panic("ERROR", zap.Error(err))
+		zaplog.ZAPS.Skip1.LOG.Panic("HAS ERROR(SHOULD BE NO ERROR)", zap.Error(err))
 	}
 }
 
@@ -36,7 +45,7 @@ func Must(err error) {
 // Nice 期望一个非零值。如果值为零，则触发 panic；如果值非零，则返回该值。
 func Nice[V comparable](a V) V {
 	if a == utils.Zero[V]() {
-		zaplog.ZAPS.Skip1.LOG.Panic("A IS ZERO VALUE", zap.Any("a", a))
+		zaplog.ZAPS.Skip1.LOG.Panic("VALUE IS ZERO(SHOULD BE NON-ZERO)", zap.Any("a", a))
 	}
 	return a
 }
@@ -45,15 +54,15 @@ func Nice[V comparable](a V) V {
 // Zero 期望值为零。如果值不为零，则触发 panic。
 func Zero[V comparable](a V) {
 	if a != utils.Zero[V]() {
-		zaplog.ZAPS.Skip1.LOG.Panic("A IS NOT ZERO VALUE", zap.Any("a", a))
+		zaplog.ZAPS.Skip1.LOG.Panic("VALUE IS NOT ZERO(SHOULD BE ZERO)", zap.Any("a", a))
 	}
 }
 
-// None expects a zero value (empty/none). Panics if the value is non-zero.
+// None expects a zero value (vacant/absent). Panics if the value is non-zero.
 // None 期望值为零（空）。如果值不为零，则触发 panic。
 func None[V comparable](a V) {
 	if a != utils.Zero[V]() {
-		zaplog.ZAPS.Skip1.LOG.Panic("A IS NOT NONE VALUE", zap.Any("a", a))
+		zaplog.ZAPS.Skip1.LOG.Panic("VALUE IS NOT ZERO(SHOULD BE ZERO)", zap.Any("a", a))
 	}
 }
 
@@ -61,7 +70,7 @@ func None[V comparable](a V) {
 // Null 期望值为 nil。如果值不为 nil，则触发 panic。
 func Null[T any](v *T) {
 	if v != nil {
-		zaplog.ZAPS.Skip1.LOG.Panic("SHOULD BE NULL BUT IS FULL")
+		zaplog.ZAPS.Skip1.LOG.Panic("VALUE PRESENT(SHOULD BE ABSENT)")
 	}
 }
 
@@ -69,66 +78,74 @@ func Null[T any](v *T) {
 // Full 期望值为非 nil。如果值为 nil，则触发 panic。
 func Full[T any](v *T) *T {
 	if v == nil {
-		zaplog.ZAPS.Skip1.LOG.Panic("SHOULD BE FULL BUT IS NULL")
+		zaplog.ZAPS.Skip1.LOG.Panic("VALUE ABSENT(SHOULD BE PRESENT)")
 	}
 	return v
 }
 
-// Equals expects the values to be equal. Panics if they are not equal.
+// Equals expects the values to be the same. Panics if not the same.
 // Equals 期望值相等。如果值不相等，则触发 panic。
 func Equals[V comparable](a, b V) {
 	if a != b {
-		zaplog.ZAPS.Skip1.LOG.Panic("A AND B ARE NOT EQUALS", zap.Any("a", a), zap.Any("b", b))
+		zaplog.ZAPS.Skip1.LOG.Panic("VALUES NOT SAME(SHOULD BE SAME)", zap.Any("a", a), zap.Any("b", b))
 	}
 }
 
-// Same expects the values to be same. Panics if they are not same.
+// Same expects the values to be the same. Panics if not the same.
 // Same 期望值相等。如果值不相等，则触发 panic。
 func Same[V comparable](a, b V) {
 	if a != b {
-		zaplog.ZAPS.Skip1.LOG.Panic("A AND B ARE NOT SAME", zap.Any("a", a), zap.Any("b", b))
+		zaplog.ZAPS.Skip1.LOG.Panic("VALUES NOT SAME(SHOULD BE SAME)", zap.Any("a", a), zap.Any("b", b))
 	}
 }
 
-// SameNice expects the values to be the same and non-zero. Panics if they are not the same or if the value is zero. Returns the value if the conditions are met.
-// SameNice 期望值相等且非零。如果值不相等或为零，则触发 panic。如果条件满足，则返回该值。
+// SameNice expects the values to match and be non-zero. Panics if not matching / when zero. Returns the value when conditions are met.
+// SameNice 期望值相等且非零。如果值不相等/为零，则触发 panic。如果条件满足，则返回该值。
 func SameNice[V comparable](a, b V) V {
-	mustskip2c.Same(a, b)
-	return mustskip2c.Nice(a)
+	must2.Nice(a)
+	must2.Nice(b)
+	must2.Same(a, b)
+	return a
 }
 
 // Sane means same && nice
-// Sane 期望值相等且非零。如果值不相等或为零，则触发 panic。如果条件满足，则返回该值。
+// Sane 期望值相等且非零。如果值不相等/为零，则触发 panic。如果条件满足，则返回该值。
 func Sane[V comparable](a, b V) V {
-	mustskip2c.Same(a, b)
-	return mustskip2c.Nice(a)
+	must2.Nice(a)
+	must2.Nice(b)
+	must2.Same(a, b)
+	return a
 }
 
+// Diff expects the values to be distinct. Panics if the values match.
+// Diff 期望值不同。如果值相同，则触发 panic。
 func Diff[V comparable](a, b V) {
 	if a == b {
-		zaplog.ZAPS.Skip1.LOG.Panic("EXPECT DIFFERENT WHILE SAME", zap.Any("a", a), zap.Any("b", b))
+		zaplog.ZAPS.Skip1.LOG.Panic("VALUES ARE SAME(SHOULD BE DIFFERENT)", zap.Any("a", a), zap.Any("b", b))
 	}
 }
 
+// Different expects the values to be distinct. Panics if the values match.
+// Different 期望值不同。如果值相同，则触发 panic。
 func Different[V comparable](a, b V) {
 	if a == b {
-		zaplog.ZAPS.Skip1.LOG.Panic("EXPECT DIFFERENT WHILE SAME", zap.Any("a", a), zap.Any("b", b))
+		zaplog.ZAPS.Skip1.LOG.Panic("VALUES ARE SAME(SHOULD BE DIFFERENT)", zap.Any("a", a), zap.Any("b", b))
 	}
 }
 
-// Is expects equality, not the logic of errors.Is, but the logic of Equals. Panics if the values are not equal.
+// Is expects matching values, not the logic of errors.Is, but the logic of Equals. Panics if the values do not match.
 // Is 期望相等，不是 errors.Is 的逻辑，而是 Equals 的逻辑。如果值不相等，则触发 panic。
 func Is[V comparable](a, b V) {
 	if a != b {
-		zaplog.ZAPS.Skip1.LOG.Panic("A AND B ARE NOT EQUALS", zap.Any("a", a), zap.Any("b", b))
+		zaplog.ZAPS.Skip1.LOG.Panic("VALUES NOT SAME(SHOULD BE SAME)", zap.Any("a", a), zap.Any("b", b))
 	}
 }
 
-// Ise expects the errors to be equal, similar to the behavior of errors.Is. Panics if they are not equal.
+// Ise expects the errors to match, using the logic of errors.Is. Panics if not matching.
 // Ise 期望错误相等，类似于 errors.Is 的行为。如果错误不相等，则触发 panic。
 func Ise(err, target error) {
 	if !errors.Is(err, target) {
-		zaplog.ZAPS.Skip1.LOG.Panic("ERROR IS NOT SAME", zap.Error(err), zap.Error(target))
+		zaplog.ZAPS.Skip1.LOG.Panic("ERROR MISMATCH(NOT SAME ERROR)", zap.Error(err), zap.Error(target))
 	}
 }
 
@@ -136,15 +153,15 @@ func Ise(err, target error) {
 // Ok 期望一个非零值。如果值为零，则触发 panic。
 func Ok[V comparable](a V) {
 	if a == utils.Zero[V]() {
-		zaplog.ZAPS.Skip1.LOG.Panic("A IS ZERO VALUE NOT OK", zap.Any("a", a))
+		zaplog.ZAPS.Skip1.LOG.Panic("VALUE IS ZERO(SHOULD BE NON-ZERO)", zap.Any("a", a))
 	}
 }
 
-// OK expects a non-zero value. Panics if the value is zero. Provides an alternative name for preference.
+// OK expects a non-zero value. Panics if the value is zero. Provides an alternative name based on preference.
 // OK 期望一个非零值。如果值为零，则触发 panic。提供一个偏好的替代名称。
 func OK[V comparable](a V) {
 	if a == utils.Zero[V]() {
-		zaplog.ZAPS.Skip1.LOG.Panic("A IS ZERO VALUE NOT OK", zap.Any("a", a))
+		zaplog.ZAPS.Skip1.LOG.Panic("VALUE IS ZERO(SHOULD BE NON-ZERO)", zap.Any("a", a))
 	}
 }
 
@@ -152,7 +169,7 @@ func OK[V comparable](a V) {
 // TRUE 期望值为 true。如果值为 false，则触发 panic。
 func TRUE(v bool) {
 	if !v {
-		zaplog.ZAPS.Skip1.LOG.Panic("expect TRUE while got FALSE", zap.Bool("v", v))
+		zaplog.ZAPS.Skip1.LOG.Panic("VALUE IS FALSE(SHOULD BE TRUE)", zap.Bool("v", v))
 	}
 }
 
@@ -160,7 +177,7 @@ func TRUE(v bool) {
 // FALSE 期望值为 false。如果值为 true，则触发 panic。
 func FALSE(v bool) {
 	if v {
-		zaplog.ZAPS.Skip1.LOG.Panic("expect FALSE while got TRUE", zap.Bool("v", v))
+		zaplog.ZAPS.Skip1.LOG.Panic("VALUE IS TRUE(SHOULD BE FALSE)", zap.Bool("v", v))
 	}
 }
 
@@ -168,15 +185,15 @@ func FALSE(v bool) {
 // False 期望值为 false。如果值为 true，则触发 panic。
 func False(v bool) {
 	if v {
-		zaplog.ZAPS.Skip1.LOG.Panic("expect FALSE while got TRUE", zap.Bool("v", v))
+		zaplog.ZAPS.Skip1.LOG.Panic("VALUE IS TRUE(SHOULD BE FALSE)", zap.Bool("v", v))
 	}
 }
 
-// Have checks that the slice is not empty/none. Panics if the slice is empty/none.
+// Have checks that the slice is not vacant. Panics if the slice is vacant.
 // Have 检查切片是否为空。如果切片为空，则触发 panic。
 func Have[T any](a []T) []T {
 	if len(a) == 0 {
-		zaplog.ZAPS.Skip1.LOG.Panic("expect LENGTH > 0 while got an empty/none slice")
+		zaplog.ZAPS.Skip1.LOG.Panic("SLICE IS EMPTY(SHOULD HAVE ITEMS)")
 	}
 	return a
 }
@@ -185,7 +202,7 @@ func Have[T any](a []T) []T {
 // Length 期望切片的长度为 n。如果长度不是 n，则触发 panic。
 func Length[T any](a []T, n int) {
 	if len(a) != n {
-		zaplog.ZAPS.Skip1.LOG.Panic("expect LENGTH = n while not equals", zap.Int("len", len(a)), zap.Int("n", n))
+		zaplog.ZAPS.Skip1.LOG.Panic("LENGTH MISMATCH(NOT MATCH)", zap.Int("len", len(a)), zap.Int("n", n))
 	}
 }
 
@@ -193,7 +210,7 @@ func Length[T any](a []T, n int) {
 // Len 是 Length 的缩写，功能相同。如果长度不是 n，则触发 panic。
 func Len[T any](a []T, n int) {
 	if len(a) != n {
-		zaplog.ZAPS.Skip1.LOG.Panic("expect LENGTH = n while not equals", zap.Int("len", len(a)), zap.Int("n", n))
+		zaplog.ZAPS.Skip1.LOG.Panic("LENGTH MISMATCH(NOT MATCH)", zap.Int("len", len(a)), zap.Int("n", n))
 	}
 }
 
@@ -205,7 +222,7 @@ func In[T comparable](v T, a []T) {
 			return
 		}
 	}
-	zaplog.ZAPS.Skip1.LOG.Panic("expect value in slice while not in", zap.Any("v", v), zap.Int("len", len(a)))
+	zaplog.ZAPS.Skip1.LOG.Panic("VALUE NOT IN SLICE(SHOULD BE IN)", zap.Any("v", v), zap.Int("len", len(a)))
 }
 
 // Contains checks if the slice contains the value. Panics if the value is not found.
@@ -216,5 +233,5 @@ func Contains[T comparable](a []T, v T) {
 			return
 		}
 	}
-	zaplog.ZAPS.Skip1.LOG.Panic("expect slice contains value while not contains", zap.Int("len", len(a)), zap.Any("v", v))
+	zaplog.ZAPS.Skip1.LOG.Panic("VALUE NOT IN SLICE(SHOULD BE IN)", zap.Int("len", len(a)), zap.Any("v", v))
 }
