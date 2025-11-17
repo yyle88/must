@@ -37,65 +37,188 @@ go get github.com/yyle88/must
 
 ## 快速入门
 
-### 示例 1: 断言非零值
+### 示例 1: 基础断言
 
 ```go
 package main
 
 import (
+	"fmt"
+
 	"github.com/yyle88/must"
 )
 
 func main() {
-	value := 42
-	must.Nice(value) // 如果值为零，触发 panic
+	fmt.Println("=== Demo 1: 基础断言 ===")
 
-	println("值是有效的:", value)
+	// 布尔断言
+	must.True(checkCondition())
+	fmt.Println("✓ 布尔检查通过")
+
+	// 验证无错误
+	must.Done(performOperation())
+	fmt.Println("✓ 无错误")
+
+	// 非零值
+	count := getCount()
+	must.Nice(count)
+	fmt.Printf("✓ 有效计数: %d\n", count)
+
+	// 值匹配验证
+	must.Equals("success", getStatus())
+	fmt.Println("✓ 值匹配")
+
+	// 切片操作
+	items := getItems()
+	must.Have(items)
+	must.Length(items, 3)
+	must.In("banana", items)
+	fmt.Printf("✓ 切片验证通过: %v\n", items)
+
+	// 指针检查
+	account := getAccount()
+	must.Full(account)
+	fmt.Printf("✓ 指针有效: %s\n", account.Name)
+
+	fmt.Println("\n=== 所有检查通过！ ===")
 }
+
+type Account struct{ Name string }
+
+func checkCondition() bool    { return true }
+func performOperation() error { return nil }
+func getStatus() string       { return "success" }
+func getCount() int           { return 42 }
+func getItems() []string      { return []string{"apple", "banana", "orange"} }
+func getAccount() *Account    { return &Account{Name: "test"} }
 ```
+
+⬆️ **源码：** [源码](internal/demos/demo1x/main.go)
 
 ---
 
-### 示例 2: 验证没有错误
+### 示例 2: Rese 包函数
 
 ```go
 package main
 
 import (
-	"errors"
+	"fmt"
+
 	"github.com/yyle88/must"
 )
 
 func main() {
-	err := someFunction()
-	must.Done(err) // 如果 err 不为 nil，触发 panic
+	fmt.Println("=== Demo 2: Rese 包 ===")
 
-	println("没有遇到错误！")
+	// V1 - 单值验证
+	config := must.V1(readConfig())
+	fmt.Printf("✓ 配置: %s\n", config)
+
+	// V2 - 双值验证
+	width, height := must.V2(getDimensions())
+	fmt.Printf("✓ 尺寸: %dx%d\n", width, height)
+
+	// P1 - 非空数据验证
+	admin := must.P1(findAdmin())
+	fmt.Printf("✓ 管理员: %s\n", admin.Name)
+
+	// C1 - 非零验证
+	num := must.C1(getNum())
+	fmt.Printf("✓ 数值: %d\n", num)
+
+	// 组合验证
+	data := getData()
+	must.Full(data)
+	must.Nice(data.Score)
+	must.Same(data.Status, "active")
+	fmt.Printf("✓ 数据: score=%d, status=%s\n", data.Score, data.Status)
+
+	fmt.Println("\n=== 所有检查通过！ ===")
 }
 
-func someFunction() error {
-	return errors.New("意外的错误")
+type Admin struct{ Name string }
+type Data struct {
+	Score  int
+	Status string
 }
+
+func readConfig() (string, error)      { return "v1.0", nil }
+func getDimensions() (int, int, error) { return 1920, 1080, nil }
+func findAdmin() (*Admin, error)       { return &Admin{"Alice"}, nil }
+func getNum() (int, error)             { return 123, nil }
+func getData() *Data                   { return &Data{95, "active"} }
 ```
+
+⬆️ **源码：** [源码](internal/demos/demo2x/main.go)
 
 ---
 
-### 示例 3: 检查切片长度
+### 示例 3: 高级专用包
 
 ```go
 package main
 
 import (
+	"fmt"
+
 	"github.com/yyle88/must"
+	"github.com/yyle88/must/mustmap"
+	"github.com/yyle88/must/mustnum"
+	"github.com/yyle88/must/mustslice"
+	"github.com/yyle88/must/muststrings"
 )
 
 func main() {
-	arr := []int{1, 2, 3}
-	must.Length(arr, 3) // 如果长度不是 3，触发 panic
+	fmt.Println("=== Demo 3: 高级包 ===")
 
-	println("切片长度正确")
+	// 数值验证
+	score := getScore()
+	mustnum.Positive(score)
+	mustnum.Gt(score, 60)
+	fmt.Printf("✓ 分数: %d\n", score)
+
+	// 切片验证
+	tags := getTags()
+	mustslice.Have(tags)
+	mustslice.Contains(tags, "go")
+	fmt.Printf("✓ 标签: %v\n", tags)
+
+	// Map 验证
+	config := getConfig()
+	mustmap.Have(config)
+	timeout := mustmap.Get(config, "timeout")
+	fmt.Printf("✓ 超时: %d\n", timeout)
+
+	// 字符串验证
+	filename := getFilename()
+	muststrings.HasSuffix(filename, ".pdf")
+	muststrings.Contains(filename, "report")
+	fmt.Printf("✓ 文件名: %s\n", filename)
+
+	// 复杂场景
+	data := getAnalytics()
+	must.Full(data)
+	mustmap.Have(data.Metrics)
+	fmt.Printf("✓ 分析数据: %d 个指标\n", len(data.Metrics))
+
+	fmt.Println("\n=== 所有检查通过！ ===")
+}
+
+type Analytics struct {
+	Metrics map[string]float64
+}
+
+func getScore() int             { return 85 }
+func getTags() []string         { return []string{"go", "test"} }
+func getConfig() map[string]int { return map[string]int{"timeout": 30} }
+func getFilename() string       { return "report.pdf" }
+func getAnalytics() *Analytics {
+	return &Analytics{Metrics: map[string]float64{"score": 87.5}}
 }
 ```
+
+⬆️ **源码：** [源码](internal/demos/demo3x/main.go)
 
 ---
 
@@ -131,6 +254,70 @@ func main() {
 | **`Len(a []T, n int)`**      | `Length` 的别名，确保 `a` 的长度是 `n`。                    | `must.Len(slice, 3)`          | 验证 `a` 的长度。            |
 | **`In(v T, a []T)`**         | 如果 `v` 不在 `a` 中，触发 panic。                        | `must.In(value, slice)`       | 确保 `v` 在 `a` 中。        |
 | **`Contains(a []T, v T)`**   | 如果 `a` 不包含 `v`，触发 panic。                         | `must.Contains(slice, value)` | 确保 `a` 包含 `v`。         |
+
+---
+
+## 使用示例
+
+### 基础使用模式
+
+**断言非零值：**
+```go
+value := 42
+must.Nice(value) // 如果值为零则 panic
+```
+
+**验证无错误：**
+```go
+err := someFunction()
+must.Done(err) // 如果 err 非 nil 则 panic
+```
+
+**检查切片长度：**
+```go
+arr := []int{1, 2, 3}
+must.Length(arr, 3) // 如果长度不是 3 则 panic
+```
+
+### 常见验证场景
+
+**Map 操作验证：**
+```go
+config := map[string]int{"port": 8080}
+port := mustmap.Get(config, "port")
+mustnum.Positive(port)
+```
+
+**字符串验证：**
+```go
+filename := "data.json"
+muststrings.HasSuffix(filename, ".json")
+muststrings.Contains(filename, "data")
+```
+
+**指针验证：**
+```go
+account := findAccount(id)
+must.Full(account) // 如果 account 为 nil 则 panic
+```
+
+---
+
+## 相关项目
+
+探索此生态系统中的更多错误处理包：
+
+### 高级包
+
+- **[must](https://github.com/yyle88/must)** - Must 风格断言，提供丰富的类型支持和详细的错误上下文（本项目）
+- **[rese](https://github.com/yyle88/rese)** - 带 panic 的结果提取，专注于安全的值解包
+
+### 基础包
+
+- **[done](https://github.com/yyle88/done)** - 简单专注的错误处理，支持方法链式调用
+- **[sure](https://github.com/yyle88/sure)** - 生成代码以创建自定义验证方法
+
+每个包针对不同的使用场景，从快速原型开发到具有全面错误处理的生产系统。
 
 ---
 

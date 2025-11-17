@@ -37,65 +37,188 @@ go get github.com/yyle88/must
 
 ## Quick Start
 
-### Example 1: Assert a Non-Zero Value
+### Example 1: Basic Assertions
 
 ```go
 package main
 
 import (
+	"fmt"
+
 	"github.com/yyle88/must"
 )
 
 func main() {
-	value := 42
-	must.Nice(value) // Panics if value is zero
+	fmt.Println("=== Demo 1: Basic Assertions ===")
 
-	println("Value is valid:", value)
+	// Boolean assertion
+	must.True(checkCondition())
+	fmt.Println("✓ Boolean check passed")
+
+	// Validate no errors
+	must.Done(performOperation())
+	fmt.Println("✓ No error")
+
+	// Non-zero value
+	count := getCount()
+	must.Nice(count)
+	fmt.Printf("✓ Valid count: %d\n", count)
+
+	// Values match
+	must.Equals("success", getStatus())
+	fmt.Println("✓ Values match")
+
+	// Slice operations
+	items := getItems()
+	must.Have(items)
+	must.Length(items, 3)
+	must.In("banana", items)
+	fmt.Printf("✓ Slice validated: %v\n", items)
+
+	// Pointer check
+	account := getAccount()
+	must.Full(account)
+	fmt.Printf("✓ Pointer valid: %s\n", account.Name)
+
+	fmt.Println("\n=== All checks passed! ===")
 }
+
+type Account struct{ Name string }
+
+func checkCondition() bool    { return true }
+func performOperation() error { return nil }
+func getStatus() string       { return "success" }
+func getCount() int           { return 42 }
+func getItems() []string      { return []string{"apple", "banana", "orange"} }
+func getAccount() *Account    { return &Account{Name: "test"} }
 ```
+
+⬆️ **Source:** [Source](internal/demos/demo1x/main.go)
 
 ---
 
-### Example 2: Validate No Error
+### Example 2: Rese Package Functions
 
 ```go
 package main
 
 import (
-	"errors"
+	"fmt"
+
 	"github.com/yyle88/must"
 )
 
 func main() {
-	err := someFunction()
-	must.Done(err) // Panics if err is not nil
+	fmt.Println("=== Demo 2: Rese Package ===")
 
-	println("No error encountered!")
+	// V1 - single value validation
+	config := must.V1(readConfig())
+	fmt.Printf("✓ Config: %s\n", config)
+
+	// V2 - two-value validation
+	width, height := must.V2(getDimensions())
+	fmt.Printf("✓ Dimensions: %dx%d\n", width, height)
+
+	// P1 - non-nil data validation
+	admin := must.P1(findAdmin())
+	fmt.Printf("✓ Admin: %s\n", admin.Name)
+
+	// C1 - non-zero validation
+	num := must.C1(getNum())
+	fmt.Printf("✓ Num: %d\n", num)
+
+	// Combined validations
+	data := getData()
+	must.Full(data)
+	must.Nice(data.Score)
+	must.Same(data.Status, "active")
+	fmt.Printf("✓ Data: score=%d, status=%s\n", data.Score, data.Status)
+
+	fmt.Println("\n=== All checks passed! ===")
 }
 
-func someFunction() error {
-	return errors.New("unexpected error")
+type Admin struct{ Name string }
+type Data struct {
+	Score  int
+	Status string
 }
+
+func readConfig() (string, error)      { return "v1.0", nil }
+func getDimensions() (int, int, error) { return 1920, 1080, nil }
+func findAdmin() (*Admin, error)       { return &Admin{"Alice"}, nil }
+func getNum() (int, error)             { return 123, nil }
+func getData() *Data                   { return &Data{95, "active"} }
 ```
+
+⬆️ **Source:** [Source](internal/demos/demo2x/main.go)
 
 ---
 
-### Example 3: Check Slice Length
+### Example 3: Advanced Specialized Packages
 
 ```go
 package main
 
 import (
+	"fmt"
+
 	"github.com/yyle88/must"
+	"github.com/yyle88/must/mustmap"
+	"github.com/yyle88/must/mustnum"
+	"github.com/yyle88/must/mustslice"
+	"github.com/yyle88/must/muststrings"
 )
 
 func main() {
-	arr := []int{1, 2, 3}
-	must.Length(arr, 3) // Panics if the length is not 3
+	fmt.Println("=== Demo 3: Advanced Packages ===")
 
-	println("Slice length is correct")
+	// Numeric validations
+	score := getScore()
+	mustnum.Positive(score)
+	mustnum.Gt(score, 60)
+	fmt.Printf("✓ Score: %d\n", score)
+
+	// Slice validations
+	tags := getTags()
+	mustslice.Have(tags)
+	mustslice.Contains(tags, "go")
+	fmt.Printf("✓ Tags: %v\n", tags)
+
+	// Map validations
+	config := getConfig()
+	mustmap.Have(config)
+	timeout := mustmap.Get(config, "timeout")
+	fmt.Printf("✓ Timeout: %d\n", timeout)
+
+	// String validations
+	filename := getFilename()
+	muststrings.HasSuffix(filename, ".pdf")
+	muststrings.Contains(filename, "report")
+	fmt.Printf("✓ Filename: %s\n", filename)
+
+	// Complex scenario
+	data := getAnalytics()
+	must.Full(data)
+	mustmap.Have(data.Metrics)
+	fmt.Printf("✓ Analytics: %d metrics\n", len(data.Metrics))
+
+	fmt.Println("\n=== All checks passed! ===")
+}
+
+type Analytics struct {
+	Metrics map[string]float64
+}
+
+func getScore() int             { return 85 }
+func getTags() []string         { return []string{"go", "test"} }
+func getConfig() map[string]int { return map[string]int{"timeout": 30} }
+func getFilename() string       { return "report.pdf" }
+func getAnalytics() *Analytics {
+	return &Analytics{Metrics: map[string]float64{"score": 87.5}}
 }
 ```
+
+⬆️ **Source:** [Source](internal/demos/demo3x/main.go)
 
 ---
 
@@ -131,6 +254,70 @@ Here are the core assertions in `must`, summarized in a table:
 | **`Len(a []T, n int)`**      | Alias of `Length`, ensures `a` length is `n`.              | `must.Len(slice, 3)`          | Validates `a` length.                  |
 | **`In(v T, a []T)`**         | Panics if `v` is not in `a`.                               | `must.In(value, slice)`       | Ensures `v` is in `a`.                 |
 | **`Contains(a []T, v T)`**   | Panics if `a` does not contain `v`.                        | `must.Contains(slice, value)` | Ensures `a` contains `v`.              |
+
+---
+
+## Examples
+
+### Basic Usage Patterns
+
+**Assert non-zero value:**
+```go
+value := 42
+must.Nice(value) // Panics if value is zero
+```
+
+**Validate no error:**
+```go
+err := someFunction()
+must.Done(err) // Panics if err is not nil
+```
+
+**Check slice length:**
+```go
+arr := []int{1, 2, 3}
+must.Length(arr, 3) // Panics if length is not 3
+```
+
+### Common Validation Scenarios
+
+**Validate map operations:**
+```go
+config := map[string]int{"port": 8080}
+port := mustmap.Get(config, "port")
+mustnum.Positive(port)
+```
+
+**String validation:**
+```go
+filename := "data.json"
+muststrings.HasSuffix(filename, ".json")
+muststrings.Contains(filename, "data")
+```
+
+**Pointer validation:**
+```go
+account := findAccount(id)
+must.Full(account) // Panics if account is nil
+```
+
+---
+
+## Related Projects
+
+Explore more error handling packages in this ecosystem:
+
+### Advanced Packages
+
+- **[must](https://github.com/yyle88/must)** - Must-style assertions with rich type support and detailed error context (this project)
+- **[rese](https://github.com/yyle88/rese)** - Result extraction with panic, focused on safe value unwrapping
+
+### Foundation Packages
+
+- **[done](https://github.com/yyle88/done)** - Simple, focused error handling with method chaining
+- **[sure](https://github.com/yyle88/sure)** - Generates code that creates custom validation methods
+
+Each package targets different use cases, from quick prototyping to production systems with comprehensive error handling.
 
 ---
 
