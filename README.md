@@ -1,7 +1,7 @@
 [![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/yyle88/must/release.yml?branch=main&label=BUILD)](https://github.com/yyle88/must/actions/workflows/release.yml?query=branch%3Amain)
 [![GoDoc](https://pkg.go.dev/badge/github.com/yyle88/must)](https://pkg.go.dev/github.com/yyle88/must)
 [![Coverage Status](https://img.shields.io/coveralls/github/yyle88/must/main.svg)](https://coveralls.io/github/yyle88/must?branch=main)
-[![Supported Go Versions](https://img.shields.io/badge/Go-1.22%2C%201.23%2C%201.24%2C%201.25-lightgrey.svg)](https://github.com/yyle88/must)
+[![Supported Go Versions](https://img.shields.io/badge/Go-1.22%2C%201.23%2C%201.24%2C%201.25-lightgrey.svg)](https://go.dev/)
 [![GitHub Release](https://img.shields.io/github/release/yyle88/must.svg)](https://github.com/yyle88/must/releases)
 [![Go Report Card](https://goreportcard.com/badge/github.com/yyle88/must)](https://goreportcard.com/report/github.com/yyle88/must)
 
@@ -12,6 +12,7 @@ Simple assertion utilities with panic-on-failure semantics designed to reduce bo
 ---
 
 <!-- TEMPLATE (EN) BEGIN: LANGUAGE NAVIGATION -->
+
 ## CHINESE README
 
 [中文说明](README.zh.md)
@@ -255,6 +256,13 @@ Here are the core assertions in `must`, summarized in a table:
 | **`In(v T, a []T)`**         | Panics if `v` is not in `a`.                               | `must.In(value, slice)`       | Ensures `v` is in `a`.                 |
 | **`Contains(a []T, v T)`**   | Panics if `a` does not contain `v`.                        | `must.Contains(slice, value)` | Ensures `a` contains `v`.              |
 
+### Boolean Package (`mustboolean`)
+
+| **Function**                  | **Description**                                            | **Example**                          | **Notes**                              |
+|-------------------------------|------------------------------------------------------------|--------------------------------------|----------------------------------------|
+| **`True(v bool)`**            | Panics if `v` is false.                                    | `mustboolean.True(isEnabled)`        | Validates if `v` is `true`.            |
+| **`Conflict(bs ...bool)`**    | Panics if multiple boolean values are true.                | `mustboolean.Conflict(a, b, c)`      | Ensures at most one boolean is true.   |
+
 ---
 
 ## Examples
@@ -322,20 +330,20 @@ Each package targets different use cases, from quick prototyping to production s
 ---
 
 <!-- TEMPLATE (EN) BEGIN: STANDARD PROJECT FOOTER -->
-<!-- VERSION 2025-09-26 07:39:27.188023 +0000 UTC -->
+<!-- VERSION 2025-11-25 03:52:28.131064 +0000 UTC -->
 
 ## 📄 License
 
-MIT License. See [LICENSE](LICENSE).
+MIT License - see [LICENSE](LICENSE).
 
 ---
 
-## 🤝 Contributing
+## 💬 Contact & Feedback
 
 Contributions are welcome! Report bugs, suggest features, and contribute code:
 
-- 🐛 **Found a mistake?** Open an issue on GitHub with reproduction steps
-- 💡 **Have a feature idea?** Create an issue to discuss the suggestion
+- 🐛 **Mistake reports?** Open an issue on GitHub with reproduction steps
+- 💡 **Fresh ideas?** Create an issue to discuss
 - 📖 **Documentation confusing?** Report it so we can improve
 - 🚀 **Need new features?** Share the use cases to help us understand requirements
 - ⚡ **Performance issue?** Help us optimize through reporting slow operations
@@ -356,7 +364,7 @@ New code contributions, follow this process:
 4. **Branch**: Create a feature branch (`git checkout -b feature/xxx`).
 5. **Code**: Implement the changes with comprehensive tests
 6. **Testing**: (Golang project) Ensure tests pass (`go test ./...`) and follow Go code style conventions
-7. **Documentation**: Update documentation to support client-facing changes and use significant commit messages
+7. **Documentation**: Update documentation to support client-facing changes
 8. **Stage**: Stage changes (`git add .`)
 9. **Commit**: Commit changes (`git commit -m "Add feature xxx"`) ensuring backward compatible code
 10. **Push**: Push to the branch (`git push origin feature/xxx`).
