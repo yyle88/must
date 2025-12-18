@@ -297,6 +297,33 @@ func TestFalse(t *testing.T) {
 	})
 }
 
+// TestCause tests error presence assertion with return
+// Validates Cause returns non-nil error and panics with nil error
+//
+// TestCause 测试错误存在断言并返回
+// 验证 Cause 返回非 nil 错误并在 nil 错误时 panic
+func TestCause(t *testing.T) {
+	errA := errors.New("something went wrong")
+	require.Equal(t, errA, must.Cause(errA))
+
+	require.Panics(t, func() {
+		t.Log(must.Cause(nil))
+	})
+}
+
+// TestWrong tests error presence assertion
+// Validates Wrong passes with non-nil error and panics with nil error
+//
+// TestWrong 测试错误存在断言
+// 验证 Wrong 在非 nil 错误时通过，在 nil 错误时 panic
+func TestWrong(t *testing.T) {
+	must.Wrong(errors.New("something went wrong"))
+
+	require.Panics(t, func() {
+		must.Wrong(nil)
+	})
+}
+
 // TestHave tests slice non-empty assertion
 // Validates Have passes with non-empty slices and panics with empty slices
 //

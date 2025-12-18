@@ -16,6 +16,7 @@
 ## 英文文档
 
 [ENGLISH README](README.md)
+
 <!-- TEMPLATE (ZH) END: LANGUAGE NAVIGATION -->
 
 ## 核心特性
@@ -227,41 +228,43 @@ func getAnalytics() *Analytics {
 
 以下是 `must` 中的核心断言函数，概述如下：
 
-| **函数**                       | **描述**                                           | **示例**                        | **备注**                 |
-|------------------------------|--------------------------------------------------|-------------------------------|------------------------|
-| **`True(v bool)`**           | 如果 `v` 为 `false`，触发 panic。                       | `must.True(isValid)`          | 验证 `v` 是否为 `true`。     |
-| **`Done(err error)`**        | 如果 `err` 不为 `nil`，触发 panic。                      | `must.Done(err)`              | 确保没有错误发生。              |
-| **`Must(err error)`**        | 如果 `err` 不为 `nil`，触发 panic。                      | `must.Must(err)`              | 类似于 `Done`。            |
-| **`Nice(a V)`**              | 如果 `a` 为零，触发 panic。                              | `must.Nice(value)`            | 确保 `a` 非零。             |
-| **`Zero(a V)`**              | 如果 `a` 不是零，触发 panic。                             | `must.Zero(value)`            | 确保 `a` 为零。             |
-| **`None(a V)`**              | 如果 `a` 非零，触发 panic。                              | `must.None(value)`            | 确保 `a` 为零。             |
-| **`Null(v any)`**            | 如果 `v` 不为 `nil`，触发 panic。                        | `must.Null(ptr)`              | 确保 `v` 为 `nil`。        |
-| **`Full(v any)`**            | 如果 `v` 为 `nil`，触发 panic。                         | `must.Full(value)`            | 确保 `v` 非 `nil`。        |
-| **`Equals(a, b V)`**         | 如果 `a` 和 `b` 不相等，触发 panic。                       | `must.Equals(a, b)`           | 检查 `a` 是否等于 `b`。       |
-| **`Same(a, b V)`**           | 如果 `a` 和 `b` 不相等，触发 panic。                       | `must.Same(a, b)`             | `Equals` 的别名。          |
-| **`SameNice(a, b V)`**       | 如果 `a` 和 `b` 不相等或为零，触发 panic。                  | `must.SameNice(a, b)`         | 确保相等且非零。             |
-| **`Sane(a, b V)`**           | 如果 `a` 和 `b` 不相等或为零，触发 panic。                  | `must.Sane(a, b)`             | `SameNice` 的别名。        |
-| **`Diff(a, b V)`**           | 如果 `a` 和 `b` 相等，触发 panic。                        | `must.Diff(a, b)`             | 确保值不同。               |
-| **`Different(a, b V)`**      | 如果 `a` 和 `b` 相等，触发 panic。                        | `must.Different(a, b)`        | `Diff` 的别名。            |
-| **`Is(a, b V)`**             | 如果 `a` 和 `b` 不相等，触发 panic。                       | `must.Is(a, b)`               | `Equals` 的别名。          |
+| **函数**                     | **描述**                                                      | **示例**                      | **备注**                        |
+| ---------------------------- | ------------------------------------------------------------- | ----------------------------- | ------------------------------- |
+| **`True(v bool)`**           | 如果 `v` 为 `false`，触发 panic。                             | `must.True(isValid)`          | 验证 `v` 是否为 `true`。        |
+| **`Done(err error)`**        | 如果 `err` 不为 `nil`，触发 panic。                           | `must.Done(err)`              | 确保没有错误发生。              |
+| **`Must(err error)`**        | 如果 `err` 不为 `nil`，触发 panic。                           | `must.Must(err)`              | 类似于 `Done`。                 |
+| **`Nice(a V)`**              | 如果 `a` 为零，触发 panic。                                   | `must.Nice(value)`            | 确保 `a` 非零。                 |
+| **`Zero(a V)`**              | 如果 `a` 不是零，触发 panic。                                 | `must.Zero(value)`            | 确保 `a` 为零。                 |
+| **`None(a V)`**              | 如果 `a` 非零，触发 panic。                                   | `must.None(value)`            | 确保 `a` 为零。                 |
+| **`Null(v any)`**            | 如果 `v` 不为 `nil`，触发 panic。                             | `must.Null(ptr)`              | 确保 `v` 为 `nil`。             |
+| **`Full(v any)`**            | 如果 `v` 为 `nil`，触发 panic。                               | `must.Full(value)`            | 确保 `v` 非 `nil`。             |
+| **`Equals(a, b V)`**         | 如果 `a` 和 `b` 不相等，触发 panic。                          | `must.Equals(a, b)`           | 检查 `a` 是否等于 `b`。         |
+| **`Same(a, b V)`**           | 如果 `a` 和 `b` 不相等，触发 panic。                          | `must.Same(a, b)`             | `Equals` 的别名。               |
+| **`SameNice(a, b V)`**       | 如果 `a` 和 `b` 不相等或为零，触发 panic。                    | `must.SameNice(a, b)`         | 确保相等且非零。                |
+| **`Sane(a, b V)`**           | 如果 `a` 和 `b` 不相等或为零，触发 panic。                    | `must.Sane(a, b)`             | `SameNice` 的别名。             |
+| **`Diff(a, b V)`**           | 如果 `a` 和 `b` 相等，触发 panic。                            | `must.Diff(a, b)`             | 确保值不同。                    |
+| **`Different(a, b V)`**      | 如果 `a` 和 `b` 相等，触发 panic。                            | `must.Different(a, b)`        | `Diff` 的别名。                 |
+| **`Is(a, b V)`**             | 如果 `a` 和 `b` 不相等，触发 panic。                          | `must.Is(a, b)`               | `Equals` 的别名。               |
 | **`Ise(err, target error)`** | 如果 `err` 不与 `target` 匹配，触发 panic，使用 `errors.Is`。 | `must.Ise(err, targetErr)`    | 类似于 `errors.Is` 的错误匹配。 |
-| **`Ok(a V)`**                | 如果 `a` 为零，触发 panic。                              | `must.Ok(value)`              | 确保 `a` 非零。             |
-| **`OK(a V)`**                | `Ok` 的别名，检查值是否非零。                                | `must.OK(value)`              | 与 `Ok` 相同。             |
-| **`TRUE(v bool)`**           | 如果 `v` 为 `false`，触发 panic。                       | `must.TRUE(isValid)`          | `True` 的别名。            |
-| **`FALSE(v bool)`**          | 如果 `v` 为 `true`，触发 panic。                        | `must.FALSE(isError)`         | 确保 `v` 为 `false`。      |
-| **`False(v bool)`**          | 如果 `v` 为 `true`，触发 panic。                        | `must.False(isError)`         | 与 `FALSE` 相同。          |
-| **`Have(a []T)`**            | 如果 `a` 为空，触发 panic。                              | `must.Have(slice)`            | 确保 `a` 不为空。            |
-| **`Length(a []T, n int)`**   | 如果 `a` 的长度不是 `n`，触发 panic。                       | `must.Length(slice, 3)`       | 确保 `a` 的长度是 `n`。       |
-| **`Len(a []T, n int)`**      | `Length` 的别名，确保 `a` 的长度是 `n`。                    | `must.Len(slice, 3)`          | 验证 `a` 的长度。            |
-| **`In(v T, a []T)`**         | 如果 `v` 不在 `a` 中，触发 panic。                        | `must.In(value, slice)`       | 确保 `v` 在 `a` 中。        |
-| **`Contains(a []T, v T)`**   | 如果 `a` 不包含 `v`，触发 panic。                         | `must.Contains(slice, value)` | 确保 `a` 包含 `v`。         |
+| **`Ok(a V)`**                | 如果 `a` 为零，触发 panic。                                   | `must.Ok(value)`              | 确保 `a` 非零。                 |
+| **`OK(a V)`**                | `Ok` 的别名，检查值是否非零。                                 | `must.OK(value)`              | 与 `Ok` 相同。                  |
+| **`TRUE(v bool)`**           | 如果 `v` 为 `false`，触发 panic。                             | `must.TRUE(isValid)`          | `True` 的别名。                 |
+| **`FALSE(v bool)`**          | 如果 `v` 为 `true`，触发 panic。                              | `must.FALSE(isError)`         | 确保 `v` 为 `false`。           |
+| **`False(v bool)`**          | 如果 `v` 为 `true`，触发 panic。                              | `must.False(isError)`         | 与 `FALSE` 相同。               |
+| **`Cause(err error)`**       | 如果 `err` 为 `nil`，触发 panic，返回该错误。                 | `must.Cause(err)`             | 确保错误存在。                  |
+| **`Wrong(err error)`**       | 如果 `err` 为 `nil`，触发 panic。                             | `must.Wrong(err)`             | 确保错误存在。                  |
+| **`Have(a []T)`**            | 如果 `a` 为空，触发 panic。                                   | `must.Have(slice)`            | 确保 `a` 不为空。               |
+| **`Length(a []T, n int)`**   | 如果 `a` 的长度不是 `n`，触发 panic。                         | `must.Length(slice, 3)`       | 确保 `a` 的长度是 `n`。         |
+| **`Len(a []T, n int)`**      | `Length` 的别名，确保 `a` 的长度是 `n`。                      | `must.Len(slice, 3)`          | 验证 `a` 的长度。               |
+| **`In(v T, a []T)`**         | 如果 `v` 不在 `a` 中，触发 panic。                            | `must.In(value, slice)`       | 确保 `v` 在 `a` 中。            |
+| **`Contains(a []T, v T)`**   | 如果 `a` 不包含 `v`，触发 panic。                             | `must.Contains(slice, value)` | 确保 `a` 包含 `v`。             |
 
 ### 布尔包 (`mustboolean`)
 
-| **函数**                        | **描述**                                                 | **示例**                               | **备注**                     |
-|-------------------------------|--------------------------------------------------------|--------------------------------------|----------------------------|
-| **`True(v bool)`**            | 如果 `v` 为 `false`，触发 panic。                          | `mustboolean.True(isEnabled)`        | 验证 `v` 是否为 `true`。       |
-| **`Conflict(bs ...bool)`**    | 如果多个布尔值为 `true`，触发 panic。                        | `mustboolean.Conflict(a, b, c)`      | 确保最多一个布尔值为 `true`。    |
+| **函数**                   | **描述**                              | **示例**                        | **备注**                      |
+| -------------------------- | ------------------------------------- | ------------------------------- | ----------------------------- |
+| **`True(v bool)`**         | 如果 `v` 为 `false`，触发 panic。     | `mustboolean.True(isEnabled)`   | 验证 `v` 是否为 `true`。      |
+| **`Conflict(bs ...bool)`** | 如果多个布尔值为 `true`，触发 panic。 | `mustboolean.Conflict(a, b, c)` | 确保最多一个布尔值为 `true`。 |
 
 ---
 
@@ -270,18 +273,21 @@ func getAnalytics() *Analytics {
 ### 基础使用模式
 
 **断言非零值：**
+
 ```go
 value := 42
 must.Nice(value) // 如果值为零则 panic
 ```
 
 **验证无错误：**
+
 ```go
 err := someFunction()
 must.Done(err) // 如果 err 非 nil 则 panic
 ```
 
 **检查切片长度：**
+
 ```go
 arr := []int{1, 2, 3}
 must.Length(arr, 3) // 如果长度不是 3 则 panic
@@ -290,6 +296,7 @@ must.Length(arr, 3) // 如果长度不是 3 则 panic
 ### 常见验证场景
 
 **Map 操作验证：**
+
 ```go
 config := map[string]int{"port": 8080}
 port := mustmap.Get(config, "port")
@@ -297,6 +304,7 @@ mustnum.Positive(port)
 ```
 
 **字符串验证：**
+
 ```go
 filename := "data.json"
 muststrings.HasSuffix(filename, ".json")
@@ -304,6 +312,7 @@ muststrings.Contains(filename, "data")
 ```
 
 **指针验证：**
+
 ```go
 account := findAccount(id)
 must.Full(account) // 如果 account 为 nil 则 panic

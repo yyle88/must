@@ -189,6 +189,23 @@ func False(v bool) {
 	}
 }
 
+// Cause expects an error to be present. Panics if error is nil, returns the error.
+// Cause 期望存在错误。如果错误为 nil，则触发 panic；否则返回该错误。
+func Cause(err error) error {
+	if err == nil {
+		zaplog.ZAPS.Skip1.LOG.Panic("ERROR ABSENT(SHOULD BE PRESENT)")
+	}
+	return err
+}
+
+// Wrong expects an error to be present. Panics if error is nil.
+// Wrong 期望存在错误。如果错误为 nil，则触发 panic。
+func Wrong(err error) {
+	if err == nil {
+		zaplog.ZAPS.Skip1.LOG.Panic("ERROR ABSENT(SHOULD BE PRESENT)")
+	}
+}
+
 // Have checks that the slice is not vacant. Panics if the slice is vacant.
 // Have 检查切片是否为空。如果切片为空，则触发 panic。
 func Have[T any](a []T) []T {

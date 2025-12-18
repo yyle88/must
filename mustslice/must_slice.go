@@ -77,7 +77,7 @@ func Nice[T any](a []T) []T {
 // Zero ensures the slice is vacant, panics if contains elements.
 // Zero 确保切片为空，若有元素则触发 panic。
 func Zero[T any](a []T) {
-	if len(a) > 0 {
+	if len(a) != 0 {
 		zaplog.ZAPS.Skip1.LOG.Panic("SLICE NOT EMPTY(SHOULD BE EMPTY)")
 	}
 }
